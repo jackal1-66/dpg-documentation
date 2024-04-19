@@ -5,12 +5,12 @@ The names of branches and tags used throughout this page are drafts and subject 
 ```
 
 ```note
-From now on, requests have to be made by labelling the corresponding PRs with the respective labels.
-Opening additional MRs in this repository is obsolete.
-For dedicated information, please see [below](#mark-prs-to-be-cherry-picked-with-labels).
+From now on, requests have to be made by labelling the corresponding PRs with the respective labels.  
+Opening additional MRs in this repository is obsolete.  
+For dedicated information, please see [below](#mark-prs-to-be-cherry-picked-with-labels).  
 ```
 
-## Branch, cherry-pick, tag, release
+## Request, cherry-pick, tag, release, start over
 
 O2 and related software evolves over time. The global evolvement/development happens on their corresponding default branches.
 
@@ -21,8 +21,7 @@ Hence, whenever a new reconstruction campaign is run on data, the default branch
 The figure below sketches the workflow branching, tagging and release procedure.
 
 While still all developments go into the default branches, some of them might be necessary bug fixes or some required features that should for instance be used in upcoming simulation productions.
-Those specific developments find their way into the branch of a given reconstruction pass via cherry-picking the corresponding commits from the default branch.
-All new software releases for a given reconstruction pass correspond to tags derived from the branch of the reconstruction pass.
+Those specific developments shall find their way to go be included in the current history of the tag that was used for a given reconstruction campaign via cherry-picking the corresponding commits from the default branch.
 
 Packages affected by the approach are:
 
@@ -39,15 +38,15 @@ Packages that will be tagged in the same way (for consistency and transparency) 
 
 ## Mark PRs to be cherry-picked with labels
 
-Whenever a bug fix or required feature needs to be contained in certain branch, the PR with those development must be annotated with the label that corresponds to the branch of the desired reconstruction campaign.
-Adding such a label means to **request** that this PR should be ported into the release branches to end up in the next software tag.
+Whenever a bug fix or required feature needs to be contained in certain tag, the PR with those developments must be annotated with the label that corresponds to that reconstruction campaign.
+Adding such a label means to **request** that this PR should be ported to be included in the next software tag.
 
-!!! info ""
+```note
+Labels can be added anytime but only PRs that have been **merged** into the default branches can be ported.
+```
 
-    Labels can be added anytime but only PRs that have been **merged** into the default branches can be ported.
-
-If the author of a PR has the possibility, labels can be added directly to a PR. However, if the role of the author does not allow to add labels, a comment can be issued in the PR that will trigger adding the labels.
-As of now, whenever a PR is (re)opened (so far functional in O2 and O2DPG), there will be an automatic message at as the first comment to that PR:
+A special comment in the PR thread is used to trigger the addition of labels.
+As of now, whenever a PR is (re)opened (so far functional in O2 and O2DPG), there will be an automatic message at as the first comment to that PR that instructs users:
 
 ```instruction
 **REQUEST FOR PRODUCTION RELEASES:**
@@ -57,10 +56,10 @@ To request your PR to be included in production software, please add the corresp
 
 This will add `<label1>` and `<label2>` and removes `<label3>`.
 
-**The following labels are available**
-async-2022-pp-apass4
-async-2023-pbpb-apass3
-async-2023-pp-apass4
+**The following labels are available**  
+async-2022-pp-apass4  
+async-2023-pbpb-apass3  
+async-2023-pp-apass4  
 async-2022-pp-apass6-2023-PbPb-apass2
 ```
 
@@ -71,9 +70,7 @@ Each label corresponds to a page where the **approved** requests are listed. The
 * [async-2023-pp-apass4](../requests/2023pp_apass4.md),
 * [async-2022-pp-apass6-2023-PbPb-apass2](../requests/2022pp_apass6.md).
 
-## Reviewing and accepting PRs
-
-A list of collected PRs for upcoming software releases shall be presented during the weekly WP12/13 meeting, Wednesdays at 15:00 CERN time. That requires requestors to be present in the meeting in case there are questions or doubts concerning their PRs.
+## Reviewing and accepting PRs (timeline)
 
 ```warning
 Only requests that have been made before Wednesday 12:00 CERN time can be considered.
@@ -81,22 +78,22 @@ Requested PRs must be **merged** by that point, otherwise they cannot be conside
 PRs that were not accepted during the meeting will not be added to the release branches.
 ```
 
-All accepted PRs will then be ported to the release branches and the tags will be prepared before the weekend.
-It is possible for the DPG to decide to not release tags when only minor changes are requested. That means that new tags are released at most once a week.
-Once ported, the PR will be marked by the operator with a `<reuqested-label>-acc` label.
+1. Wednesdays at 15:30 during the [WP12/13 meeting](https://indico.cern.ch/category/4868/): Approval of requested PRs is discussed based on what is listed [here](../requests_automatic/).
+1. All approved PRs will try to be ported to the corresponding tags. If they do not apply cleanly, they cannot be taken (see more on that below).
+1. Before the weekend: The new tags for simulation/reconstruction will be prepared. All ported PRs will be marked with another label that indicates `accepted`.
+1. Tuesdays at 12:00: The [list of requests](../requests_automatic/) is updated and the link will be sent around with a meeting reminder. The list will contain also still open PRs that contain labels so that people can work on merging them.
+1. Wednesdays at 12:00: A final update is applied to the [list of requests](../requests_automatic/).
+1. Starting over...
 
-## Patching a tag
+### If PRs (their commits) do not apply cleanly
 
-While tags are derived from the release branches, already existing tags can be patched. That is however only done if absolutely necessary. The convention is to add a letter at the end of the original tag name. For instance, the third patch of tag `v1-2-3` will be named `v1-2-3c`.
-If patching a tag is requested, the corresponding PRs shall not only be cherry-picked on top of the tag but they shall also go into the release branch such that all following regular tags will contain the patch as well. Once a patched tag has been released, the previous ones become obsolete and shall not be used anymore for any reconstruction or simulation. Following the example above, tags `v1-2-3`, `v1-2-3a` and `v1-2-3b` will be obsolete as soon as `v1-2-3c` has been released. All those patches will be contained in the branch `v1-2`.
+In this case, the requestors are asked to find all other PRs/commits that would be required to be ported such that their original PR commits can be applied cleanly. These PRs would need to be marked with the corresponding labels. In addition, the responsible people are asked to also get in touch with DPG via email in addition.
 
-```note
-If a patch is requested but the next tag does not yet exist, there will be no patched tag but the next one will be created directly. For instance, if a patch if requested for tag `v1-2-3` but the tag `v1-2-4` does not yet exist, it will be created. Tag `v1-2-3` shall be marked as obsolete.
-```
+### If requested PRs were merged more than 3 months ago
 
-```warning
-Patched tags will have no immediate correspondence to a branch in terms of commit history/hashes.
-```
+If requested PRs are somewhat old and lie further in the past, in addition to adding labels responsible people must get in touch with the DPG via email in addition.
+
+A list of collected PRs for upcoming software releases shall be presented during the weekly WP12/13 meeting, Wednesdays at 15:00 CERN time. That requires requestors to be present in the meeting in case there are questions or doubts concerning their PRs.
 
 ### Collect the PRs/commits for a tag
 

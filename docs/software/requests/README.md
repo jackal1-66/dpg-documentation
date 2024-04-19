@@ -1,5 +1,5 @@
-# Software requests
+# Accepted software requests
 
-See also [tagging procedure](../README.md).
+See also [tagging procedure](../doc/).
 
 {% include list.liquid all=true %}

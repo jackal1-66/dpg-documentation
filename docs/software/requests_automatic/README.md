@@ -1,5 +1,5 @@
-# Collecting cherr-pick requests
+# Collecting software requests
 
-In the following pages the cherr-pick requests are collected.
+In the following pages the software requests are collected.
 
 {% include list.liquid all=true %}

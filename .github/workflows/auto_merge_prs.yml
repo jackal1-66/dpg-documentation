@@ -1,0 +1,35 @@
+name: Merge alibuild PRs
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+jobs:
+  merge-alibuild-pr:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'alibuild'
+    steps:
+      - name: Merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
+        uses: octokit/graphql-action@v2.x
+        with:
+          query: |
+            mutation MergePullRequest($pullRequestId: ID!) {
+              mergePullRequest(input: {
+                pullRequestId: $pullRequestId,
+                mergeMethod: REBASE
+              }) {
+                clientMutationId
+                pullRequest {
+                  id
+                  merged
+                }
+              }
+            }
+          variables: |
+            {
+              "pullRequestId": "${{ github.event.pull_request.id }}"
+            }
+
