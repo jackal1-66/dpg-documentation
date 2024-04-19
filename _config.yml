@@ -1,0 +1,20 @@
+title: ALICE DPG documentation
+description: ALICE DPG documentation
+
+theme: null
+
+debug:
+  compress: false
+  dist: false
+  shortcodes: true
+
+readme_index:
+  with_frontmatter: true
+
+plugins:
+  - jemoji
+  - jekyll-avatar
+  - jekyll-mentions
+
+exclude:
+  - LICENSE
