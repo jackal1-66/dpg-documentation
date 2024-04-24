@@ -45,6 +45,7 @@ jobs:
                     createdAt
                     updatedAt
                     mergedAt
+                    number
                     labels(first:10) {
                       edges{
                         node {
@@ -67,6 +68,7 @@ jobs:
                     createdAt
                     updatedAt
                     mergedAt
+                    number
                     labels(first:10) {
                       edges{
                         node {
@@ -103,7 +105,16 @@ jobs:
               #     - mergedAt or updatedAt
               prs_dict = {}
 
+              pr_numbers = []
+
               for pr in prs:
+
+                  number = pr['number']
+
+                  if number in pr_numbers:
+                      continue
+
+                  pr_numbers.append(number)
 
                   flag = pr['state']
 
