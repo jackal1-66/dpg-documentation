@@ -195,7 +195,10 @@ jobs:
         working-directory: dpg-documentation/
         run: |
           cp ../*.md docs/software/requests_automatic
+          echo "::set-output name=NEED_PR::true"
           if git diff --quiet; then
+            echo "No changes, nothing to push."
+            echo "::set-output name=NEED_PR::false"
             exit 0 # Nothing has changed, so no need to send a PR.
           fi
           # Add the markdown files here
@@ -208,6 +211,7 @@ jobs:
 
       - name: Open PR
         id: open_pr
+        if: ${{ steps.add_push_repo_id.outputs.NEED_PR == 'true' }}
         uses: octokit/graphql-action@v2.x
         env:
           GITHUB_TOKEN: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
