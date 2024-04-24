@@ -30,6 +30,6 @@ jobs:
             }
           variables: |
             {
-              "pullRequestId": "${{ github.event.pull_request.id }}"
+              "pullRequestId": "${{ github.event.pull_request.node_id }}"
             }
 
