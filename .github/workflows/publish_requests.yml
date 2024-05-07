@@ -84,6 +84,29 @@ jobs:
                   }
                 }
               }
+              QualityControl: repository(owner: "AliceO2Group", name: "QualityControl") {
+                pullRequests(first: 100, states: [MERGED, OPEN], orderBy: { field: UPDATED_AT, direction: DESC }) {
+                  nodes {
+                    title
+                    createdAt
+                    updatedAt
+                    mergedAt
+                    number
+                    labels(first:10) {
+                      edges{
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    state
+                    url
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
             }
 
       - name: Store PRs
@@ -192,7 +215,7 @@ jobs:
                   prs = json.load(f)
 
               for repo_name, prs_repo in prs.items():
-                  if repo_name not in ['AliceO2', 'O2DPG']:
+                  if repo_name not in ['AliceO2', 'O2DPG', 'QualityControl']:
                       continue
                   make_report(prs_repo, repo_name, f'dpg_pr_report_{repo_name}.md')
 

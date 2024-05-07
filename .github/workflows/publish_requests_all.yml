@@ -219,6 +219,29 @@ jobs:
                   }
                 }
               }
+              QualityControl_1: repository(owner: "AliceO2Group", name: "QualityControl") {
+                pullRequests(first: 100, states: [MERGED, OPEN], orderBy: { field: UPDATED_AT, direction: DESC }) {
+                  nodes {
+                    title
+                    createdAt
+                    updatedAt
+                    mergedAt
+                    number
+                    labels(first:10) {
+                      edges{
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    state
+                    url
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
             }
 
       - name: Store PRs
@@ -326,9 +349,9 @@ jobs:
               with open(prs_json, 'r') as f:
                   prs = json.load(f)
 
-              prs_all = {'AliceO2': {'pullRequests': {'nodes': []}}, 'O2DPG': {'pullRequests': {'nodes': []}}}
+              prs_all = {'AliceO2': {'pullRequests': {'nodes': []}}, 'O2DPG': {'pullRequests': {'nodes': []}}, 'QualityControl': {'pullRequests': {'nodes': []}}}
               for repo_name, prs_repo in prs.items():
-                  if 'AliceO2' not in repo_name and 'O2DPG' not in repo_name:
+                  if 'AliceO2' not in repo_name and 'O2DPG' not in repo_name and 'QualityControl' not in repo_name:
                       continue
                   repo_name = repo_name.split('_')[0]
                   prs_all[repo_name]['pullRequests']['nodes'].extend(prs_repo['pullRequests']['nodes'])
