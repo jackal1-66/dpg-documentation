@@ -127,6 +127,29 @@ jobs:
                   }
                 }
               }
+              AliceO2_5: repository(owner: "AliceO2Group", name: "AliceO2") {
+                pullRequests(first: 100, states: [MERGED, OPEN], orderBy: { field: UPDATED_AT, direction: DESC }) {
+                  nodes {
+                    title
+                    createdAt
+                    updatedAt
+                    mergedAt
+                    number
+                    labels(first:10) {
+                      edges{
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    state
+                    url
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
               O2DPG_1: repository(owner: "AliceO2Group", name: "O2DPG") {
                 pullRequests(first: 100, states: [MERGED, OPEN], labels: ["async-2023-pbpb-apass3"], orderBy: { field: UPDATED_AT, direction: DESC }) {
                   nodes {
@@ -198,6 +221,29 @@ jobs:
               }
               O2DPG_4: repository(owner: "AliceO2Group", name: "O2DPG") {
                 pullRequests(first: 100, states: [MERGED, OPEN], labels: ["async-2022-pp-apass4"], orderBy: { field: UPDATED_AT, direction: DESC }) {
+                  nodes {
+                    title
+                    createdAt
+                    updatedAt
+                    mergedAt
+                    number
+                    labels(first:10) {
+                      edges{
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    state
+                    url
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
+              O2DPG_5: repository(owner: "AliceO2Group", name: "O2DPG") {
+                pullRequests(first: 100, states: [MERGED, OPEN], orderBy: { field: UPDATED_AT, direction: DESC }) {
                   nodes {
                     title
                     createdAt
