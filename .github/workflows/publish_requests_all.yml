@@ -314,7 +314,7 @@ jobs:
 
               for pr in prs:
 
-                  repo_name_number = (repo_name, pr['number'])
+                  repo_name_number = (pr['repo_name'], pr['number'])
 
                   if repo_name_number in repo_pr_numbers:
                       continue
