@@ -397,8 +397,7 @@ jobs:
                   for pr in prs_repo.get('pullRequests', {}).get('nodes', []):
                       # add the repo name manually, otherwise we would also need to query it in addition from GitHub; but we know what we are asking for in the initial query
                       pr['repo_name'] = repo_name
-
-                  prs.append(pr)
+                      prs.append(pr)
 
               # sort before further processing (by state, label and merge/update timestamp)
               prs = sort_prs(prs)
