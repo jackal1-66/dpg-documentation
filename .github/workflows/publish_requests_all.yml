@@ -310,16 +310,16 @@ jobs:
               #     - mergedAt or updatedAt
               prs_dict = {}
 
-              pr_numbers = []
+              repo_pr_numbers = []
 
               for pr in prs:
 
-                  number = pr['number']
+                  repo_name_number = (repo_name, pr['number'])
 
-                  if number in pr_numbers:
+                  if repo_name_number in repo_pr_numbers:
                       continue
 
-                  pr_numbers.append(number)
+                  repo_pr_numbers.append(repo_name_number)
 
                   flag = pr['state']
 
