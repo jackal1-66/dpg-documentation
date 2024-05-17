@@ -58,6 +58,16 @@ jobs:
                     author {
                       login
                     }
+                    mergeCommit {
+                      oid
+                    }
+                    commits {
+                      nodes {
+                        commit {
+                          oid
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -81,6 +91,16 @@ jobs:
                     author {
                       login
                     }
+                    mergeCommit {
+                      oid
+                    }
+                    commits {
+                      nodes {
+                        commit {
+                          oid
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -103,6 +123,16 @@ jobs:
                     url
                     author {
                       login
+                    }
+                    mergeCommit {
+                      oid
+                    }
+                    commits {
+                      nodes {
+                        commit {
+                          oid
+                        }
+                      }
                     }
                   }
                 }
