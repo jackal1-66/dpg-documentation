@@ -58,7 +58,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -91,7 +91,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -124,7 +124,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -157,7 +157,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -190,7 +190,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -223,7 +223,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -256,7 +256,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -289,7 +289,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -322,7 +322,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -355,7 +355,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
@@ -388,7 +388,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits {
+                    commits(first: 10) {
                       nodes {
                         commit {
                           oid
