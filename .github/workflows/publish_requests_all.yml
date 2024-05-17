@@ -424,7 +424,8 @@ jobs:
 
               for pr in prs:
 
-                  repo_name_number = (pr['repo_name'], pr['number'])
+                  repo_name = pr['repo_name']
+                  repo_name_number = (repo_name, pr['number'])
 
                   if repo_name_number in repo_pr_numbers:
                       continue
@@ -461,9 +462,12 @@ jobs:
                           continue
 
                       if label_name not in prs_dict[flag]:
-                          prs_dict[flag][label_name] = []
+                          prs_dict[flag][label_name] = {}
 
-                      prs_dict[flag][label_name].append(pr)
+                      if repo_name not in prs_dict[flag][label_name]:
+                          prs_dict[flag][label_name][repo_name] = []
+
+                      prs_dict[flag][label_name][repo_name].append(pr)
 
               return prs_dict
 
@@ -473,22 +477,23 @@ jobs:
               with open(outfile, 'w') as f:
                   f.write(f'# List PRs in state {flag} (from oldest to recent)\n')
 
-                  for label_name, pr_list in prs_per_label.items():
+                  for label_name, prs_per_repo in prs_per_label.items():
 
                       f.write(f'\n\n### For label {label_name}\n\n')
 
-                      sort_by = [pr['mergedAt'] for pr in pr_list]
-                      common_header = '| Author | Package | PR | PR title | Merged at |\n| --- | --- | --- | --- | --- |\n'
-
-                      if None in sort_by:
-                          sort_by = [pr['updatedAt'] for pr in pr_list]
-                          common_header = '| Author | Package | PR | PR title | Updated at |\n| --- | --- | --- | --- | --- |\n'
+                      if flag == 'MERGED':
+                          sort_by_field = 'mergedAt'
+                          common_header = '| Author | Package | PR | PR title | Merged at | #original commits | Merge commit |\n| --- | --- | --- | --- | --- | --- | --- |\n'
+                      else:
+                          sort_by_field = 'updatedAt'
+                          common_header = '| Author | Package | PR | PR title | Updated at | #original commits | Merge commit |\n| --- | --- | --- | --- | --- | --- | --- |\n'
 
                       f.write(common_header)
 
-                      for s, pr in sorted(zip(sort_by, pr_list)):
-                          f.write(f'| {pr["author"]["login"]} | {pr["repo_name"]} | [PR]({pr["url"]}) | {pr["title"]} | {s} |\n')
-
+                      for repo_name, prs in prs_per_repo.items():
+                          sort_by = [pr[sort_by_field] for pr in prs]
+                          for s, pr in sorted(zip(sort_by, prs)):
+                              f.write(f'| {pr["author"]["login"]} | repo_name | [PR]({pr["url"]}) | {pr["title"]} | {s} | {len(pr["commits"]["nodes"])} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
           def make_markdowns(prs_json):
               # a list of all PRs
