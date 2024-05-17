@@ -493,7 +493,7 @@ jobs:
                       for repo_name, prs in prs_per_repo.items():
                           sort_by = [pr[sort_by_field] for pr in prs]
                           for s, pr in sorted(zip(sort_by, prs)):
-                              f.write(f'| {pr["author"]["login"]} | repo_name | [PR]({pr["url"]}) | {pr["title"]} | {s} | {len(pr["commits"]["nodes"])} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
+                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {s} | {len(pr["commits"]["nodes"])} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
           def make_markdowns(prs_json):
               # a list of all PRs
