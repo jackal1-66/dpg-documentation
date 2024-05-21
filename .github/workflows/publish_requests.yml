@@ -1,9 +1,9 @@
 name: Update with requested PRs
 on:
   workflow_dispatch:
-  schedule: # run Tuesdays and Wednesdays at 12:00
-    - cron: '0 12 * * 2'
-    - cron: '0 12 * * 3'
+  # schedule: # run Tuesdays and Wednesdays at 12:00
+  #   - cron: '0 12 * * 2'
+  #   - cron: '0 12 * * 3'
 jobs:
   pr-requests:
     runs-on: ubuntu-latest
