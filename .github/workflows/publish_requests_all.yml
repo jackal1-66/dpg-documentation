@@ -43,7 +43,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -76,7 +76,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -109,7 +109,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -142,7 +142,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -175,7 +175,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -208,7 +208,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -241,7 +241,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -274,7 +274,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -307,7 +307,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -340,7 +340,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
@@ -373,7 +373,7 @@ jobs:
                     updatedAt
                     mergedAt
                     number
-                    labels(first:10) {
+                    labels(first:12) {
                       edges{
                         node {
                           name
