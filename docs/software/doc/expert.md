@@ -1,21 +1,100 @@
-# Software expert page
+# Operator documentation
 
-## Collecting the open requests
+## Update software tags
 
-The open requests to be ported/cherry-picked, can be collected easily as markdown. To do so, run
+This is a description of some tooling that supports the following procedure:
 
-* for O2: `${O2DPG_ROOT}/UTILS/o2dpg_make_github_pr_report.py --repo AliceO2`, this goes to the report `o2dpg_pr_report_AliceO2.md`,
-* for O2DPG: `${O2DPG_ROOT}/UTILS/o2dpg_make_github_pr_report.py --repo O2DPG`, this goes to the report `o2dpg_pr_report_O2DPG.md`.
+1. cherry-pick new software requests,
+1. tag related packages,
+1. create requested tags,
+1. push these tags to the corresponding upstream repo,
+1. update the documentation page
 
-These can then be directly committed to this repository in the corresponding sub-pages [here](../requests_automtaic/index.md).
+The [tool](o2dpg_async_update.py) is written in python. The following steps should be done one after the other.
 
-As a next step, it is foreseen to run it automatically in a GitLab pipeline and potentially even send an automatic email to the WP12/13 mailing list on Wednesdays at 12:00. With this email, people shall be notified about the upcoming discussion of open requests and get additional general information.
+In the following, we will assume that the script is located in the directory `${ASYNC_BIN}`.
 
-## Approving and marking PRs
+## Cherry-pick and tag
 
-All PRs shall be marked with a corresponding `<label>-accepted` label. This is foreseen to be done automatically.
-What is foreseen is the following:
+To run this, a `YAML` configuration like the following must be prepared per label (or a group of labels since sometimes, a tag is associated to multiple labels at the same time):
 
-1. Cherry-picking shall be done with `cherry-pick -x <ref>`, so note the additional `-x`.
-1. Pushing the branch with those cherry-picks back to the upstream repo.
-1. GitHub shall automatically deduce everything and set the `<label>-accepted` labels, see also the related PR at https://github.com/alisw/ali-bot/pull/1300.
+```yaml
+labels:
+  - <label1> # e.g. async-2022-pp-apass6-2023-PbPb-apass2
+
+packages:
+    - name: first package # e.g. O2DPG
+        start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+        target_tag: <target-tag> # e.g. async-20240115.8.trd
+        commits:
+        - <commit1>
+        - <commit2>
+        - ...
+        - <commitN>
+    - name: second package # e.g. O2
+        start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+        target_tag: <target-tag> # e.g. async-20240115.8.trd
+        commits:
+        - <commit1>
+        - <commit2>
+        - ...
+        - <commitN>
+    - name: third package # e.g. QualityControl
+    start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+    target_tag: <target-tag> # e.g. async-20240115.8.trd
+    commits:
+      - <commit1>
+      - <commit2>
+      - ...
+      - <commitN>
+```
+
+In this case we are hence interested in
+
+1. cherry-picking **per package** a list of commits,
+1. subsequently, we wish to add the corresponding `<target-tag>` to each package.
+
+This is all done by issuing the following command
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py tag <input_config>
+```
+
+If this goes wrong at any point, everything will be reset.
+
+### Notes
+
+It is recommended to run all this in a dedicated working directory since running it creates additional output files. Also, the packages it works with are checked out and written to disk.
+
+If a package is not yet on disk, it will be cloned.
+
+#### Force retagging
+
+Sometimes, you created a tag but then you realise, that a commit is missing or similar. In that case, do
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py tag <input_config> --retag <pkg1> <pkg2>
+```
+and mention there all the package you would like to retag after changing the list of commits in the config.
+
+## Push tagged packages
+
+Once the previous step has been run successfully on the configuration `<input_config>`, run
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py push <input_config>
+```
+to push all packages' tags to their remote repository.
+
+## Update the documentation
+
+Now comes the step that is crucial for our bookkeeping. This should be run once after all packages for all labels have been cherry-picked and pushed.
+Run
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py update-doc
+```
+to update the documentation.
+
+This will
+
+1. Clone or fetch the documentation repository if it is not yet there,
+1. reset the local default branch to the upstream history,
+1. update a summary YAML (internal use) with everything that has been done in the previous steps,
+1. compile a markdown with everything that has ever been cherry-picked; each commit will be mapped to the tags it was first seen in and associated labels will also be added for completeness.
