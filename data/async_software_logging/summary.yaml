@@ -1,0 +1,47 @@
+AliceO2:
+  78e868c40c6d870969ec0562d81c1599048addc2:
+  - 1716890125452
+  - https://github.com/AliceO2Group/AliceO2
+  - 'ParticleDatabase: Update Lambda(1520) info according to the latest Pythia8 (#12896)'
+  - 78e868c40c6d870969ec0562d81c1599048addc2
+  - - async-2022-apass4-pp-mc.4d
+  - - async-2022-pp-apass4
+O2DPG:
+  00c052b11baf24eeb2d46bbe2d04d8d8462a4ad9:
+  - 1716890125452
+  - https://github.com/AliceO2Group/O2DPG
+  - Add other resonances (#1540)
+  - 00c052b11baf24eeb2d46bbe2d04d8d8462a4ad9
+  - - async-2022-apass4-pp-mc.4d
+  - - async-2022-pp-apass4
+  6b4452c9b7f16c2c62376d23d3a1f258085f8d23:
+  - 1716890125452
+  - https://github.com/AliceO2Group/O2DPG
+  - Remove option ctp-readout-create (#1607)
+  - 6b4452c9b7f16c2c62376d23d3a1f258085f8d23
+  - - async-20240115.8.trd
+    - async-20240229.pbpb.2d
+  - - async-2022-pp-apass6-2023-PbPb-apass2
+    - async-2023-pbpb-apass3
+  903362d8d80b9a287b7d70b6d2e0ccd8021dc0a8:
+  - 1716890125452
+  - https://github.com/AliceO2Group/O2DPG
+  - Pythia8 events with pt>ptLeading and PDG of interest (#1638)
+  - 903362d8d80b9a287b7d70b6d2e0ccd8021dc0a8
+  - - async-2022-apass4-pp-mc.4d
+    - async-20240115.8.trd
+    - async-20240229.pbpb.2d
+  - - async-2022-pp-apass4
+    - async-2022-pp-apass6-2023-PbPb-apass2
+    - async-2023-pbpb-apass3
+  9fcc96dabf5a73cf35b2f8b75ad471a70291e519:
+  - 1716890125452
+  - https://github.com/AliceO2Group/O2DPG
+  - pythia8 events with (anti)deuterons and high pt (#1639)
+  - 9fcc96dabf5a73cf35b2f8b75ad471a70291e519
+  - - async-2022-apass4-pp-mc.4d
+    - async-20240115.8.trd
+    - async-20240229.pbpb.2d
+  - - async-2022-pp-apass4
+    - async-2022-pp-apass6-2023-PbPb-apass2
+    - async-2023-pbpb-apass3
