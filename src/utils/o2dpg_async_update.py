@@ -33,7 +33,8 @@ DEFAULTS_QC = {'upstream': 'git@github.com:AliceO2Group/QualityCOntrol.git',
                'dir': 'QualityControl',
                'default_branch': 'master'}
 
-DPG_DOCS = {'upstream': 'git@github.com:AliceO2Group/dpg-documentation.git',
+DPG_DOCS = {'name': 'dpg-docs',
+            'upstream': 'git@github.com:AliceO2Group/dpg-documentation.git',
             'dir': 'dpg-documentation',
             'default_branch': 'main'}
 
@@ -215,7 +216,7 @@ def update_default_branch(package):
     """
     cwd = package['dir']
     default_branch = package['default_branch']
-    return fetch(package) and run_command(f'git reset --hard {default_branch} origin/{default_branch}', cwd=cwd) == 0
+    return fetch(package) and run_command(f'git checkout {default_branch}', cwd=cwd) == 0 and run_command(f'git reset --hard origin/{default_branch}', cwd=cwd) == 0
 
 
 def checkout(package, fetch_again=False):
@@ -370,7 +371,7 @@ def git_commit(package, message):
     """
     Git wrapper for git commit
     """
-    return run_command(f'git commit -m {message}', cwd=package['dir']) == 0
+    return run_command(f'git commit -m "{message}"', cwd=package['dir']) == 0
 
 
 def git_push(package):
@@ -502,13 +503,13 @@ def push_tagged(package):
 #####################################################
 def make_cherry_picked_markdown(package_name, commit_tuples, output_markdown):
     with open(output_markdown, 'w') as f:
-        f.write(f'# Cherry-picked commits for {package_name}\n')
+        f.write(f'# Cherry-picked commits for {package_name}\n\n')
         f.write('| Commit subject | Tags first seen | Associated labels |\n| --- | --- | --- |\n')
         for commit_tuple in sorted(commit_tuples):
             # sorted by timestamp
             commit_link = f'{commit_tuple[1]}/commit/{commit_tuple[3]}'
-            tag_links = [f'[t]({commit_tuple[1]}/tree/{t})' for t in commit_tuple[4]]
-            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {", ".join(tag_links)} | {", ".join(commit_tuple[5])} |')
+            tag_links = [f'[{t}]({commit_tuple[1]}/tree/{t})' for t in list(set(commit_tuple[4]))]
+            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {", ".join(tag_links)} | {", ".join(list(set(commit_tuple[5])))} |\n')
 
 
 ##########################################
@@ -617,19 +618,19 @@ def run_update_doc(args):
     Entrypoint for updating the documentation based on new cherry-picks and tags
     """
     # our documentation package
-    package = DPG_DOCS
-
     # prepare
     clone(DPG_DOCS)
     update_default_branch(DPG_DOCS)
 
     # the directory where we store the YAML summary
     # This summary will always be extended and used to create a markdown table from
-    log_file_dir = join(DPG_DOCS['dir'], 'data', 'async_software_logging')
+    git_log_file_dir = join('data', 'async_software_logging')
+    log_file_dir = join(DPG_DOCS['dir'], git_log_file_dir)
     if not exists(log_file_dir):
         makedirs(log_file_dir)
 
     # the actual file with the entire summary
+    git_log_file_path = join(git_log_file_dir, 'summary.yaml')
     log_file_path = join(log_file_dir, 'summary.yaml')
 
     # today from epoch, in ms; this is to sort so that we have always the latest commits on top
@@ -666,19 +667,25 @@ def run_update_doc(args):
         packages_to_commit_summary[package_name] = packages_to_commit_summary.get(package_name, {})
         d_package = packages_to_commit_summary[package_name]
 
-        for commit, subject in zip(package['commits_success_subjects'], package['commits_cherry_picked']['success']):
+        for subject, commit in zip(package['commits_success_subjects'], package['commits_cherry_picked']['success']):
             if commit not in d_package:
                 # construct a tuple for this commit
-                d_package[commit] = (timestamp, package['http'], subject, commit, [], [])
+                d_package[commit] = [timestamp, package['http'], subject, commit, [], []]
             # there is only one tag, so append
-            d_package[commit][4].append(package['target_tag'])
+            tag = package['target_tag']
+            if tag not in d_package[commit][4]:
+                d_package[commit][4].append(tag)
             # there might be in general multiple labels associated with a tag, so extend
-            d_package[commit][5].extend(package['labels'])
+            for label in package['labels']:
+                if label not in d_package[commit][5]:
+                    d_package[commit][5].append(label)
 
     # this is the location where the markdowns will be written
-    output_markdown_dir = join(package['dir'], 'docs', 'software', 'accepted')
+    git_add_dir = join('docs', 'software', 'accepted')
+    output_markdown_dir = join(DPG_DOCS['dir'], git_add_dir)
     if not exists(output_markdown_dir):
         makedirs(output_markdown_dir)
+
 
     # this is also where all git commands and stdout/stderr will go
     LOG_FILE.append('o2dpg_asyncSW_update_doc.log')
@@ -687,17 +694,20 @@ def run_update_doc(args):
     # for each package we write a dedicated file
     for package_name, commit_dict in packages_to_commit_summary.items():
         # location of the markdown
-        accepted_file_path = join(output_markdown_dir, f'{package_name}_accepted.md')
+        accepted_file_name = f'{package_name}_accepted.md'
+        accepted_file_path = join(output_markdown_dir, accepted_file_name)
         make_cherry_picked_markdown(package_name, list(commit_dict.values()), accepted_file_path)
         # after creating/updating the file, add it
-        git_add(package, accepted_file_path)
+        git_add(DPG_DOCS, join(git_add_dir, accepted_file_name))
 
     # write and add the global summary YAML which will then be used again next time we cherry-pick
     write_yaml(packages_to_commit_summary, log_file_path)
-    git_add(DPG_DOCS, log_file_path)
+    git_add(DPG_DOCS, git_log_file_path)
 
     # finish this by committing and pushing
     git_commit(DPG_DOCS, 'Update accepted cherry-picks')
+
+    return 0
     git_push(DPG_DOCS)
 
     return 0
@@ -735,7 +745,7 @@ if __name__ == '__main__':
     update_doc_parser.set_defaults(func=run_update_doc)
 
     fetch_parser = sub_parsers.add_parser("fetch")
-    update_doc_parser.set_defaults(func=run_fetch)
+    fetch_parser.set_defaults(func=run_fetch)
 
     args = parser.parse_args()
     sys.exit(args.func(args))
