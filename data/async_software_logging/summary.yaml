@@ -64,6 +64,22 @@ O2DPG:
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+  2c71e9be7a072052e3a36eb0d7abf946c21a49bc:
+  - 1716996159482
+  - https://github.com/AliceO2Group/O2DPG
+  - pythia8 for pp with pt>ptLeading and random strange hadron (#1646)
+  - 2c71e9be7a072052e3a36eb0d7abf946c21a49bc
+  - - async-2022-apass4-pp-mc.4e
+    - async-20240115.9.trd
+    - async-20240229.pbpb.2e
+    - async-v1-01-04
+  - - async-2022-pp-apass4
+    - async-2022-pp-apass6-2023-PbPb-apass2
+    - async-2023-pbpb-apass3
+    - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
   62f23cbab5b5f205d1f484644ae18420e359a261:
   - 1716913518832
   - https://github.com/AliceO2Group/O2DPG
@@ -161,4 +177,14 @@ O2DPG:
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
 O2Physics: {}
-QualityControl: {}
+QualityControl:
+  0d9ceeebde230024c567e14bf5024a02a03f9b9b:
+  - 1716996159482
+  - https://github.com/AliceO2Group/QualityControl
+  - QC-1178 window length should be infinite if moving windows are not used (#2302)
+  - 0d9ceeebde230024c567e14bf5024a02a03f9b9b
+  - - async-v1-01-04
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
