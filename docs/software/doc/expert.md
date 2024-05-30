@@ -14,6 +14,18 @@ The [tool](o2dpg_async_update.py) is written in python. The following steps shou
 
 In the following, we will assume that the script is located in the directory `${ASYNC_BIN}`.
 
+It is strongly recommended to run all of the following in a **dedicated working directory** since running it creates additional output files.
+In addition, it checks out the git packages it works with. Since it manipulates them as well, there should not be any personal work done in those local packages.
+
+Some additional default values of packages are defined for
+
+* O2,
+* O2DPG,
+* O2Physics,
+* QualityControl.
+
+For those, the script knows for instance where to find the upstream repositories.
+
 ## Cherry-pick and tag
 
 To run this, a `YAML` configuration like the following must be prepared per label (or a group of labels since sometimes, a tag is associated to multiple labels at the same time):
@@ -59,15 +71,9 @@ This is all done by issuing the following command
 ${ASYNC_BIN}/o2dpg_async_update.py tag <input_config>
 ```
 
-If this goes wrong at any point, everything will be reset.
+If this goes wrong at any point, everything will be reset and one can start over after fixing potential merge conflict or similar.
 
-### Notes
-
-It is recommended to run all this in a dedicated working directory since running it creates additional output files. Also, the packages it works with are checked out and written to disk.
-
-If a package is not yet on disk, it will be cloned.
-
-#### Force retagging
+### Force retagging
 
 Sometimes, you created a tag but then you realise, that a commit is missing or similar. In that case, do
 ```bash

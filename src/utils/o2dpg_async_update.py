@@ -207,7 +207,7 @@ def fetch(package):
     return run_command('git fetch origin --tags', cwd=cwd) == 0
 
 
-def update_default_branch(package):
+def update_branch_from_remote(package, branch=None):
     """
     Update the default branch of a package
 
@@ -215,11 +215,11 @@ def update_default_branch(package):
     2. hard reset (assuming we don't care about local changes)
     """
     cwd = package['dir']
-    default_branch = package['default_branch']
-    return fetch(package) and run_command(f'git checkout {default_branch}', cwd=cwd) == 0 and run_command(f'git reset --hard origin/{default_branch}', cwd=cwd) == 0
+    branch = branch or package['default_branch']
+    return run_command(f'git checkout {branch}', cwd=cwd) == 0 and run_command(f'git reset --hard origin/{branch}', cwd=cwd) == 0
 
 
-def checkout(package, fetch_again=False):
+def prepare_for_cherry_pick(package):
     """
     Checkout a repo at a certain branch or tag
 
@@ -231,19 +231,12 @@ def checkout(package, fetch_again=False):
     """
     print(f'INFO: Checkout {package["name"]}')
 
-    if not clone(package):
-        return False
-
+    # check this out
+    revision_checkout = package['start_from']
     cwd = package['dir']
 
-    if fetch_again and not fetch(package):
-        return False
-
-    # checkout this
-    ref_co = package['start_from']
-
-    if run_command(f'git checkout {ref_co}', cwd=cwd) != 0:
-        print(f'ERROR: Cannot checkout {ref_co} in {cwd}.')
+    if run_command(f'git checkout {revision_checkout}', cwd=cwd) != 0:
+        print(f'ERROR: Cannot checkout {revision_checkout} in {cwd}.')
         return False
 
     out = []
@@ -254,12 +247,13 @@ def checkout(package, fetch_again=False):
             is_detached = True
             break
 
-    package['head_detached'] = is_detached
-
     if not is_detached:
-        # we are on a branch, create a temporary one where to start
-        branch_tmp = f'{package["start_from"]}-for-{package["target_tag"]}'
-        package['start_from_cache'] = package["start_from"]
+        # we are on a branch, create a temporary one where the work will be done
+        # only when everything went fine we will reset the actual branch to the temporary one
+        update_branch_from_remote(package, revision_checkout)
+        branch_tmp = f'{revision_checkout}-for-{package["target_tag"]}'
+        package['start_from_cache'] = revision_checkout
+        # so for now we basically pretend as if this was the branch
         package['start_from'] = branch_tmp
         if run_command(f'git checkout -B {branch_tmp}', cwd=cwd) != 0:
             print(f'ERROR: Cannot create temporary branch {branch_tmp} in {cwd}.')
@@ -360,6 +354,9 @@ def git_tag(package, retag=False):
     return True
 
 
+#####################
+# Pure Git wrappers #
+#####################
 def git_add(package, paths):
     """
     Git wrapper for git add
@@ -383,17 +380,20 @@ def git_push(package):
 
 def git_verify(package, rev=None):
     rev = package['target_tag'] if not rev else rev
-    cwd = package['dir']
-    return run_command(f'git rev-parse --verify {rev}', cwd=cwd) == 0
+    return run_command(f'git rev-parse --verify {rev}', cwd=package['dir']) == 0
 
 
 ###################################################
 # Additional helpers for the cherry-pick workflow #
 ###################################################
+def make_package_summary_path(package, summary_dir):
+    return join(summary_dir, f'{package["name"]}_{package["target_tag"]}.yaml')
+
+
 def write_summary(package, out_dir):
     if not exists(out_dir):
         makedirs(out_dir)
-    out_file = join(out_dir, f'{package["name"]}_{package["target_tag"]}.yaml')
+    out_file = make_package_summary_path(package, out_dir)
     write_yaml(package, out_file)
 
 
@@ -454,9 +454,19 @@ def finalise(package):
     Some final actions/afterburner steps after cherry-picking
     """
     subjects = []
+    to_push = [package['target_tag']]
     package['commits_success_subjects'] = subjects
+    package['push'] = to_push
     cwd = package['dir']
     for commit in package['commits_cherry_picked']['success']:
+        out = []
+        run_command(f'git log --pretty="%s" -n1 {commit}', cwd=cwd, stdout_list=out)
+        subjects.append(out[0])
+
+    subjects = []
+    package['commits_skipped_subjects'] = subjects
+    cwd = package['dir']
+    for commit in package['commits_cherry_picked']['skipped']:
         out = []
         run_command(f'git log --pretty="%s" -n1 {commit}', cwd=cwd, stdout_list=out)
         subjects.append(out[0])
@@ -469,6 +479,8 @@ def finalise(package):
     run_command(f'git branch -D {package["start_from"]}', cwd=cwd)
     package["start_from"] = package["start_from_cache"]
     del package["start_from_cache"]
+    # this branch needs to be pushed as well
+    to_push.append(package["start_from"])
 
 
 def push_tagged(package):
@@ -479,23 +491,22 @@ def push_tagged(package):
         print(f'ERROR: Package {package_name} does not seem to contain tag {tag}.')
         return
 
-    tag = package['target_tag']
     cwd = package['dir']
 
-    out = []
-
-    if run_command(f'git push origin {tag}', cwd=cwd, stdout_list=out) != 0:
-        print(f'WARNING: Could not push tag {tag} due to')
-        for line in out:
-            print(line)
-        return
-
-    for line in out:
-        if 'Everything up-to-date' in line:
-            print(f'INFO: Tag {tag} of package {package_name} was already upstream')
+    for to_push in package['push']:
+        out = []
+        if run_command(f'git push origin {to_push}', cwd=cwd, stdout_list=out) != 0:
+            print(f'WARNING: Could not push {to_push} due to')
+            for line in out:
+                print(line)
             return
 
-    print(f'INFO: Pushed tag {tag} of package {package_name}.')
+        for line in out:
+            if 'Everything up-to-date' in line:
+                print(f'INFO: {to_push} of package {package_name} was already upstream')
+                return
+
+        print(f'INFO: Pushed {to_push} of package {package_name}.')
 
 
 #####################################################
@@ -509,7 +520,7 @@ def make_cherry_picked_markdown(package_name, commit_tuples, output_markdown):
             # sorted by timestamp
             commit_link = f'{commit_tuple[1]}/commit/{commit_tuple[3]}'
             tag_links = [f'[{t}]({commit_tuple[1]}/tree/{t})' for t in list(set(commit_tuple[4]))]
-            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {", ".join(tag_links)} | {", ".join(list(set(commit_tuple[5])))} |\n')
+            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {"<br>".join(tag_links)} | {"<br>".join(list(set(commit_tuple[5])))} |\n')
 
 
 ##########################################
@@ -550,7 +561,7 @@ def run_cherry_pick_tag(args):
         else:
             print('==> Sane!')
 
-        if not checkout(package):
+        if not fetch(package) or not prepare_for_cherry_pick(package):
             return 1
         else:
             print('==> Checked out!')
@@ -604,11 +615,15 @@ def run_push_tagged(args):
     LOG_FILE.append(args.log_file or f'o2dpg_asyncSW_{"_".join(labels)}_push_tags.log')
 
     # First go through packages, clone them and checkout where we want to work with them
-    for package in get_packages(config):
+    for package_initial in get_packages(config):
 
         # Add defaults for a few things if not given explicitly
-        complete_package_config(package, labels)
-        push_tagged(package)
+        complete_package_config(package_initial, labels)
+        summary_package_path = make_package_summary_path(package_initial, args.input)
+        # now actually, we take what was written in the summary because that has some information we might need
+        package_final = read_yaml(summary_package_path)
+        # and from that we push
+        push_tagged(package_final)
 
     return 0
 
@@ -619,8 +634,8 @@ def run_update_doc(args):
     """
     # our documentation package
     # prepare
-    clone(DPG_DOCS)
-    update_default_branch(DPG_DOCS)
+    fetch(DPG_DOCS)
+    update_branch_from_remote(DPG_DOCS)
 
     # the directory where we store the YAML summary
     # This summary will always be extended and used to create a markdown table from
@@ -667,7 +682,7 @@ def run_update_doc(args):
         packages_to_commit_summary[package_name] = packages_to_commit_summary.get(package_name, {})
         d_package = packages_to_commit_summary[package_name]
 
-        for subject, commit in zip(package['commits_success_subjects'], package['commits_cherry_picked']['success']):
+        for subject, commit in zip(package['commits_success_subjects'] + package.get('commits_skipped_subjects', []), package['commits_cherry_picked']['success'] + package.get('commits_cherry_picked', {}).get('skipped', [])):
             if commit not in d_package:
                 # construct a tuple for this commit
                 d_package[commit] = [timestamp, package['http'], subject, commit, [], []]
@@ -706,16 +721,8 @@ def run_update_doc(args):
 
     # finish this by committing and pushing
     git_commit(DPG_DOCS, 'Update accepted cherry-picks')
-
-    return 0
     git_push(DPG_DOCS)
 
-    return 0
-
-
-def run_fetch(args):
-    for package in DEFAULTS.values():
-        fetch(package)
     return 0
 
 
@@ -737,15 +744,13 @@ if __name__ == '__main__':
 
     push_parser = sub_parsers.add_parser("push")
     push_parser.add_argument("config", help="The input configuration")
+    push_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     push_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     push_parser.set_defaults(func=run_push_tagged)
 
     update_doc_parser = sub_parsers.add_parser("update-doc")
     update_doc_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     update_doc_parser.set_defaults(func=run_update_doc)
-
-    fetch_parser = sub_parsers.add_parser("fetch")
-    fetch_parser.set_defaults(func=run_fetch)
 
     args = parser.parse_args()
     sys.exit(args.func(args))
