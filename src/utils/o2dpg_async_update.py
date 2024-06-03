@@ -701,7 +701,7 @@ def run_update_doc(args):
         package_name = package['name']
         # also labels need to be added per commit
         labels = package['labels']
-        operator = package.get('operator', 'UNKNWON') #package['operator']
+        operator = package['operator']
         # we need the tag to be appended per commit
         tag = package['target_tag']
         start_from = package['start_from']
@@ -793,9 +793,6 @@ def run_update_doc(args):
     git_commit(DPG_DOCS, 'Update accepted cherry-picks')
     git_push(DPG_DOCS)
 
-    # TODO TODO TODO Now we need to make the pages to connect start-tag/branch to target-tag, add operators here as well and also have the labels again
-    # we should have data that reflects a mapping of labels to {pass, period, data sample} so that we can make the correct connections between things
-
     return 0
 
 
@@ -825,7 +822,7 @@ def run(args):
     init_config_path = join(ASYNC_DIR, 'config.yaml')
 
     if not exists(init_config_path) and not args.operator:
-        print('ERROR: You need to specify the operator with --operator <operator-name> or run init --operator <operator-name> once.')
+        print('ERROR: You need to specify the operator with --operator "Firstname Lastname" for a sub-command or run with sub-command init --operator "Firstname Lastname" once.')
         return 1
 
     init_config = read_yaml(init_config_path)
@@ -851,22 +848,22 @@ if __name__ == '__main__':
     init_parser.set_defaults(func=run_init)
 
     # rel-val
-    tag_parser = sub_parsers.add_parser("tag")
+    tag_parser = sub_parsers.add_parser("tag", parents=[common_operator_parser])
     tag_parser.add_argument("config", help="The input configuration")
     tag_parser.add_argument("--retag", nargs="*", help='whether or not to force retagging of packages')
     tag_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     tag_parser.add_argument('--output', help='Output directory where final YAML files will be written.', default='o2dpg_cherry_picks')
     tag_parser.set_defaults(func=run_cherry_pick_tag)
 
-    push_parser = sub_parsers.add_parser("push")
+    push_parser = sub_parsers.add_parser("push", parents=[common_operator_parser])
     push_parser.add_argument("config", help="The input configuration")
     push_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     push_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     push_parser.set_defaults(func=run_push_tagged)
 
-    update_doc_parser = sub_parsers.add_parser("update-doc")
+    update_doc_parser = sub_parsers.add_parser("update-doc", parents=[common_operator_parser])
     update_doc_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     update_doc_parser.set_defaults(func=run_update_doc)
 
     args = parser.parse_args()
-    sys.exit(args.func(args))
+    sys.exit(run(args))

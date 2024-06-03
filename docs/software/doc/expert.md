@@ -26,6 +26,18 @@ Some additional default values of packages are defined for
 
 For those, the script knows for instance where to find the upstream repositories.
 
+## Specifying the operator
+
+For each step, the operator must be known. To set the operator permanently, run
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py init --operator "Firstname Lastname"
+```
+
+To overwrite or set the operator for a specific action, run any other command with
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py <command> --operator "Firstname Lastname" [<other-options>]
+```
+
 ## Cherry-pick and tag
 
 To run this, a `YAML` configuration like the following must be prepared per label (or a group of labels since sometimes, a tag is associated to multiple labels at the same time):
