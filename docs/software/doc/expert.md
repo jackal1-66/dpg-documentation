@@ -36,25 +36,25 @@ labels:
 
 packages:
     - name: first package # e.g. O2DPG
-        start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-        target_tag: <target-tag> # e.g. async-20240115.8.trd
-        commits:
-        - <commit1>
-        - <commit2>
-        - ...
-        - <commitN>
+      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+      target_tag: <target-tag> # e.g. async-20240115.8.trd
+      commits:
+      - <commit1>
+      - <commit2>
+      - ...
+      - <commitN>
     - name: second package # e.g. O2
-        start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-        target_tag: <target-tag> # e.g. async-20240115.8.trd
-        commits:
-        - <commit1>
-        - <commit2>
-        - ...
-        - <commitN>
+      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+      target_tag: <target-tag> # e.g. async-20240115.8.trd
+      commits:
+      - <commit1>
+      - <commit2>
+      - ...
+      - <commitN>
     - name: third package # e.g. QualityControl
-    start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-    target_tag: <target-tag> # e.g. async-20240115.8.trd
-    commits:
+      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
+      target_tag: <target-tag> # e.g. async-20240115.8.trd
+      commits:
       - <commit1>
       - <commit2>
       - ...
