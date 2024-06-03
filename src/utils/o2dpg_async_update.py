@@ -524,8 +524,8 @@ def make_cherry_picked_markdown(package_name, commit_tuples, output_markdown):
         for commit_tuple in sorted(commit_tuples):
             # sorted by timestamp
             commit_link = f'{commit_tuple[1]}/commit/{commit_tuple[3]}'
-            tag_links = [f'[{t[0]}]({commit_tuple[1]}/tree/{t[0]}) ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H-%M")})' for t in commit_tuple[6]]
-            labels = [f'{t[0]} ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H-%M")})' for t in commit_tuple[7]]
+            tag_links = [f'[{t[0]}]({commit_tuple[1]}/tree/{t[0]}) ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[6]]
+            labels = [f'{t[0]} ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[7]]
             f.write(f'| [{commit_tuple[2]}]({commit_link}) | {"<br>".join(tag_links)} | {"<br>".join(labels)} |\n')
 
 
@@ -537,7 +537,7 @@ def make_history_markdown(package_name, history_list, output_markdown):
             # sorted by timestamp
             start_from = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[2]})'
             tag = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[3]})'
-            date_time = datetime.fromtimestamp(tag_step[0]).strftime("%Y-%m-%d %H-%M")
+            date_time = datetime.fromtimestamp(tag_step[0]).strftime("%Y-%m-%d %H:%M")
             f.write(f'| {start_from} | {tag} | {tag_step[4]} | {"<br>".join(tag_step[5])} | {date_time} |\n')
 
 
