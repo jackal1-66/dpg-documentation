@@ -9,6 +9,7 @@ from datetime import datetime
 import yaml
 from subprocess import Popen, PIPE, STDOUT
 from shlex import split as sh_split
+import logging
 
 
 ### Some defaults
@@ -70,6 +71,10 @@ LOG_FILE = []
 ####################
 # Global utilities #
 ####################
+def get_logger():
+    return logging.getLogger('async_sw_logger')
+
+
 def run_command(cmd, log_file=None, cwd=None, stdout_list=None):
     """
     Run a command
@@ -105,21 +110,24 @@ def read_yaml(path):
     """
     Read YAML into a dictionary
     """
+    logger = get_logger()
+    logger.info('Read YAML file from %s', path)
     try:
         with open(path, 'r') as f:
             return yaml.safe_load(f)
     except Exception:
+        logger.error('Could not read file.')
         return None
 
 
-def write_yaml(d, out_file):
+def write_yaml(d, path):
     """
     Write dictionary to YAML
     """
-    with open(out_file, 'w') as f:
+    logger = get_logger()
+    logger.info('Write YAML file to %s', path)
+    with open(path, 'w') as f:
         yaml.safe_dump(d, f)
-
-    return None
 
 
 #########################################
@@ -132,9 +140,10 @@ def get_default(package_name):
     try:
         return DEFAULTS[package_name]
     except KeyError:
-        print('WARNING: Unknown package name. Available packages:')
+        logger = get_logger()
+        logger.warning('Unknown package name. Available packages:')
         for package_name in DEFAULTS:
-            print(f'  - {package_name}')
+            logger.warning('  - %s', package_name)
     return {}
 
 
@@ -156,12 +165,13 @@ def check_package_config(package):
     """
     Check a package config, for instance if it is complete
     """
-    print(f'INFO: Check configuration of package {package["name"]}')
+    logger = get_logger()
+    logger.info('Check configuration of package %s.', package["name"])
     is_sane = True
     for key in REQUIRED_KEYS:
         if key not in package:
             is_sane = False
-            print(f"ERROR: {key} not in package configuration.")
+            logger.error('%s not in package configuration.', key)
 
     return is_sane
 
@@ -173,7 +183,7 @@ def get_packages(config):
     try:
         return config['packages']
     except KeyError:
-        print('ERROR: Cannot find packages. Make sure to specify a list of packages under the key "packages.')
+        get_logger().error('Cannot find packages. Make sure to specify a list of packages under the key "packages".')
     return None
 
 
@@ -184,7 +194,7 @@ def get_labels(config):
     try:
         return config['labels']
     except KeyError:
-        print('ERROR: Cannot get labels. Make sure to specify a list of labels under the key "labels".')
+        get_logger().error('Cannot get labels. Make sure to specify a list of labels under the key "labels".')
 
 
 #########################
@@ -194,9 +204,11 @@ def clone(package):
     """
     Clone from remote
     """
+    logger = get_logger()
+    logger.info('Cloning %s', package['name'])
     cwd = package['dir']
     if not exists(cwd) and run_command(f'git clone {package["upstream"]} {cwd}') != 0:
-        print(f'ERROR: Failed to clone repo from {package["upstream"]} to {cwd}.')
+        logger.error('Failed to clone repo from %s to %s.', package['upstream'], cwd)
         return False
     return True
 
@@ -205,6 +217,7 @@ def fetch(package):
     """
     Fetch everything from remote including tags
     """
+    get_logger().info('Fetching package %s', package['name'])
     cwd = package['dir']
     if not exists(cwd):
         return clone(package)
@@ -218,8 +231,9 @@ def update_branch_from_remote(package, branch=None):
     1. Fetch
     2. hard reset (assuming we don't care about local changes)
     """
-    cwd = package['dir']
     branch = branch or package['default_branch']
+    get_logger().info('Update branch %s from remote.', branch)
+    cwd = package['dir']
     return run_command(f'git checkout {branch}', cwd=cwd) == 0 and run_command(f'git reset --hard origin/{branch}', cwd=cwd) == 0
 
 
@@ -233,14 +247,16 @@ def prepare_for_cherry_pick(package):
 
     If a branch is requested to be checked-out, do so but for now move to a temporary branch
     """
-    print(f'INFO: Checkout {package["name"]}')
+    logger = get_logger()
+
+    logger.info('Prepare for cherry-picking in package %s.', package['name'])
 
     # check this out
     revision_checkout = package['start_from']
     cwd = package['dir']
 
     if run_command(f'git checkout {revision_checkout}', cwd=cwd) != 0:
-        print(f'ERROR: Cannot checkout {revision_checkout} in {cwd}.')
+        logger.error('Cannot checkout %s in %s.', revision_checkout, cwd)
         return False
 
     out = []
@@ -259,8 +275,9 @@ def prepare_for_cherry_pick(package):
         package['start_from_cache'] = revision_checkout
         # so for now we basically pretend as if this was the branch
         package['start_from'] = branch_tmp
+        logger.info('Prepare temporary branch %s to work on', branch_tmp)
         if run_command(f'git checkout -B {branch_tmp}', cwd=cwd) != 0:
-            print(f'ERROR: Cannot create temporary branch {branch_tmp} in {cwd}.')
+            logger.error('Cannot create temporary branch %s in %s.', branch_tmp, cwd)
             return False
 
     return True
@@ -292,12 +309,14 @@ def git_cherry_pick(package):
 
     Go through a list of provided commits and try to apply them
     """
+    logger = get_logger()
+
     package_name = package['name']
 
-    print(f'INFO: Cherry-pick {package_name}')
+    logger.info('Run cherry-picking in package %s', package_name)
 
     if not package['commits']:
-        print(f'WARNING: No commits found to cherry-pick for package {package_name}')
+        logger.warning(f'No commits found to cherry-pick for package {package_name}')
         return True
 
     commits_success = package['commits_cherry_picked']['success']
@@ -307,13 +326,12 @@ def git_cherry_pick(package):
     cwd = package['dir']
 
     for commit in package['commits']:
-        print(f"Cherry-picking {commit}")
         ret = cherry_pick_single(cwd, commit)
         if isinstance(ret, list):
-            print(f"ERROR: There was a problem cherry-picking {commit}")
+            logger.error('There was a problem cherry-picking %s', commit)
             for line in ret:
                 print(f'  {line}')
-            print('Try to continue')
+            logger.info('Trying to continue')
             commits_failed.append(commit)
             continue
         if ret < 0:
@@ -321,13 +339,14 @@ def git_cherry_pick(package):
             continue
         commits_success.append(commit)
 
-    print(f"Cherry-picking\n  SUCCESS: {len(commits_success)}\n  SKIPPED: {len(commits_skipped)}\n  FAILED: {len(commits_failed)}")
+    logger.info('Cherry-picking\n  SUCCESS: %d\n  SKIPPED: %d\n  FAILED: %d', len(commits_success), len(commits_skipped), len(commits_failed))
 
     # set the status
     package['status_cherry_pick'] = not commits_failed
 
     if commits_failed:
         # Reset to initial SHA of start tag or branch
+        logger.info('Cherry-picking has failed, resetting everything in package %s', package['name'])
         run_command(f'git reset --hard HEAD~{len(commits_success)}', cwd=cwd)
         return False
 
@@ -341,18 +360,19 @@ def git_tag(package, retag=False):
     package_name = package["name"]
     tag = package['target_tag']
 
-    print(f'INFO: Tag {package_name} with {tag}')
+    logger = get_logger()
+    logger.info('Attempt to tag %s with %s', package_name, tag)
 
     cwd = package['dir']
 
     if run_command(f'git rev-parse --verify {tag}', cwd=cwd) == 0:
         if retag and run_command(f'git tag -d {tag}', cwd=cwd) != 0:
-            print(f'ERROR: Was asked to retag package {package_name} with {tag}.')
+            logger.error('Was asked to re-tag package %s with %s, but failed to remove existing tag.', package_name, tag)
             return False
 
     if run_command(f'git tag {tag}', cwd=cwd) != 0:
         run_command(f'git reset --hard HEAD~{len(package["commits_cherry_picked"]["success"])}', cwd=cwd)
-        print(f'ERROR: Cannot tag {cwd} with tag {tag}')
+        logger.error('Cannot tag %s with tag %s, reset everything.', cwd, tag)
         return False
 
     return True
@@ -413,10 +433,12 @@ def closure(package):
     tag = package['target_tag']
     package_name = package['name']
 
-    print(f'INFO: Verify {package_name}')
+    logger = get_logger()
+
+    logger.info('Verify %s.', package_name)
 
     if run_command(f'git rev-parse --verify {tag}', cwd=cwd) != 0:
-        print(f'ERROR: Package {package_name} does not contain tag {tag} which was requested')
+        logger.error('Package %s does not contain tag %s which was requested', package_name, tag)
         return False
 
     # check if HEAD is at the target tag
@@ -426,17 +448,17 @@ def closure(package):
     run_command('git rev-parse HEAD', cwd=cwd, stdout_list=rev_target_head)
 
     if rev_target_tag[0] != rev_target_head[0]:
-        print(f'ERROR: Hashes of HEAD and {tag} are different: {rev_target_tag[0]} != {rev_target_head[0]}')
+        logger.error('Hashes of HEAD and %s are different: %s != %s', tag, rev_target_tag[0], rev_target_head[0])
         return False
 
     if package['commits_cherry_picked']['failed']:
-        print(f'ERROR: Package {package_name} has failed commits.')
+        logger.error('Package %s has failed commits.', package_name)
         return False
 
     commits_success = package['commits_cherry_picked']['success']
 
     if not commits_success and package['commits_cherry_picked']['skipped']:
-        print(f'WARNING: All proposed commits were found to be skipped for package {package_name}. However, the tag {tag} is where it is supposed to be, so it should be fine.')
+        logger.warning('All proposed commits were found to be skipped for package %s. However, the tag %s is where it is supposed to be, so it should be fine.', package_name, tag)
         return True
 
     # now go commit-by-commit to see if there have been taken in order
@@ -451,7 +473,7 @@ def closure(package):
                 found = True
                 break
         if not found:
-            print(f'ERROR: During the verification, the commit {commit} was apparently not cherry-picked.')
+            logger.error('During the verification, the commit %s was apparently not cherry-picked.', commit)
             return False
 
     return True
@@ -494,188 +516,36 @@ def finalise(package, operator):
 
 def push_tagged(package):
 
+    logger = get_logger()
+
     tag = package['target_tag']
     package_name = package['name']
     if not git_verify(package):
-        print(f'ERROR: Package {package_name} does not seem to contain tag {tag}.')
-        return
+        logger.error('Package %s does not seem to contain tag %s.', package_name, tag)
+        return False
 
     cwd = package['dir']
 
     for to_push in package['push']:
         out = []
         if run_command(f'git push origin {to_push}', cwd=cwd, stdout_list=out) != 0:
-            print(f'WARNING: Could not push {to_push} due to')
+            logger.warning('Could not push %s due to', to_push)
             for line in out:
                 print(line)
-            return
+            return False
 
         for line in out:
             if 'Everything up-to-date' in line:
-                print(f'INFO: {to_push} of package {package_name} was already upstream')
-                return
+                logger.info('%s of package %s was already upstream.', to_push, package_name)
+                return True
 
-        print(f'INFO: Pushed {to_push} of package {package_name}.')
+        logger.info('Pushed %s of package %s.', to_push, package_name)
+        return True
 
 
 #####################################################
 # Additional helpers for updating the documentation #
 #####################################################
-def make_cherry_picked_markdown(package_name, commit_tuples, output_markdown):
-    with open(output_markdown, 'w') as f:
-        f.write(f'# Cherry-picked commits for {package_name}\n\n')
-        f.write('| Commit subject | Tags first seen | Associated labels |\n| --- | --- | --- |\n')
-        for commit_tuple in sorted(commit_tuples):
-            # sorted by timestamp
-            commit_link = f'{commit_tuple[1]}/commit/{commit_tuple[3]}'
-            tag_links = [f'[{t[0]}]({commit_tuple[1]}/tree/{t[0]}) ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[6]]
-            labels = [f'{t[0]} ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[7]]
-            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {"<br>".join(tag_links)} | {"<br>".join(labels)} |\n')
-
-
-def make_history_markdown(package_name, history_list, output_markdown):
-    with open(output_markdown, 'w') as f:
-        f.write(f'# Tagging history for {package_name}\n\n')
-        f.write('| Started from | Created tag | Operator | Associated labels | Date |\n| --- | --- | --- | --- | --- |\n')
-        for tag_step in sorted(history_list):
-            # sorted by timestamp
-            start_from = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[2]})'
-            tag = f'[{tag_step[3]}]({tag_step[1]}/tree/{tag_step[3]})'
-            date_time = datetime.fromtimestamp(tag_step[0]).strftime("%Y-%m-%d %H:%M")
-            f.write(f'| {start_from} | {tag} | {tag_step[4]} | {"<br>".join(tag_step[5])} | {date_time} |\n')
-
-
-def make_label_markdown(packages_to_tag_history, output_markdown):
-    by_label = {}
-    for package_name, package_tuples in packages_to_tag_history.items():
-        for package_tuple in package_tuples.values():
-            print(package_tuple)
-
-            for label in package_tuple[5]:
-                if label not in by_label:
-                    by_label[label] = {}
-                if package_name not in by_label[label]:
-                    by_label[label][package_name] = []
-                by_label[label][package_name].append(package_tuple)
-
-    with open(output_markdown, 'w') as f:
-        f.write('# Latest tags per label\n\n')
-        f.write('| Label | Package, tags |\n| --- | --- |\n')
-        for label, tuples_per_package in by_label.items():
-            package_write_string = []
-            for package_name, package_tuples in tuples_per_package.items():
-                # this will sort by timestamp
-                package_tuples.sort()
-                package_first = package_tuples[0]
-                package_write_string.append(f'{package_name}, [{package_first[3]}]({package_first[1]}/tree/{package_first[3]}), ({package_first[4]}, {datetime.fromtimestamp(package_first[0]).strftime("%Y-%m-%d %H:%M")})')
-            f.write(f'| {label} | {"<br>".join(package_write_string)} |\n')
-
-
-##########################################
-# main entrypoints steered from argparse #
-##########################################
-def run_cherry_pick_tag(args):
-    """
-    Entrypoint for cherry-picking and tagging
-    """
-    config = read_yaml(args.config)
-    labels = get_labels(config)
-
-    if not labels:
-        print(f'ERROR: No labels given in {args.config}')
-        return 1
-
-    # this is where all git commands and stdout/stderr will go
-    LOG_FILE.append(args.log_file or f'o2dpg_asyncSW_{"_".join(labels)}_cherry_pick.log')
-
-    # find out whether to retag something
-    packages_to_retag = []
-    if args.retag:
-        for package_name in args.retag:
-            packages_to_retag.append(PACKAGE_ALIASES.get(package_name, package_name))
-
-    already_tagged = []
-    to_tag = []
-
-    # First go through packages, clone them and checkout where we want to work with them
-    for package in get_packages(config):
-
-        # Add defaults for a few things if not given explicitly
-        complete_package_config(package, labels)
-
-        # check if the configuration is complete
-        if not check_package_config(package):
-            return 1
-        else:
-            print('==> Sane!')
-
-        if not fetch(package) or not prepare_for_cherry_pick(package):
-            return 1
-        else:
-            print('==> Checked out!')
-
-        # warn if this is tagged already with the target tag
-        tagged = git_verify(package)
-        if tagged and package['name'] not in packages_to_retag and 'all' not in packages_to_retag:
-            # if we found this to be done already, take it
-            already_tagged.append(package)
-            print(f'WARNING: Package {package["name"]} has the tag {package["target_tag"]} already. That might create problems if we re-tag. Run with --retag <pkg1> ... <pkgN> to force re-tagging.')
-        else:
-            to_tag.append(package)
-
-    # now we should be in a position ready to cherry-pick and tag
-    for package in to_tag:
-
-        if not git_cherry_pick(package):
-            return 1
-        else:
-            print('==> Cherry-picked!')
-
-        if not git_tag(package, retag=args.retag):
-            return 1
-        else:
-            print('==> Tagged!')
-
-        if not closure(package):
-            return 1
-        else:
-            print('==> Verified!')
-
-        # finalise, for instance, if we have cherry-picked to a branch, this is so far a temporary branch which needs to be moved to the target branch
-        finalise(package, args.operator)
-        # write the final summary to yaml for further processing
-        write_single_summary(package, args.output)
-
-    return 0
-
-
-def run_push_tagged(args):
-    """
-    Entrypoint for pushing newly tagged packages
-    """
-    config = read_yaml(args.config)
-    labels = get_labels(config)
-
-    if not labels:
-        print(f'ERROR: No labels given in {args.config}')
-        return 1
-
-    # this is where all git commands and stdout/stderr will go
-    LOG_FILE.append(args.log_file or f'o2dpg_asyncSW_{"_".join(labels)}_push_tags.log')
-
-    # First go through packages, clone them and checkout where we want to work with them
-    for package_initial in get_packages(config):
-        # Add defaults for a few things if not given explicitly
-        complete_package_config(package_initial, labels)
-        summary_package_path = make_package_summary_path(package_initial, args.input)
-        # now actually, we take what was written in the summary because that has some information we might need
-        package_final = read_yaml(summary_package_path)
-        # and from that we push
-        push_tagged(package_final)
-
-    return 0
-
-
 def update_tag_history(package, tag_history, timestamp):
     # have a dictionary mapping start and target tag to a tuple where we collect information for this transition
     # 0. timestamp (ms);
@@ -724,12 +594,179 @@ def update_commits(package, d_package, timestamp):
                 commit_tuple[7].append([label, operator, timestamp])
 
 
+def make_cherry_picked_markdown(package_name, commit_tuples, output_markdown):
+    with open(output_markdown, 'w') as f:
+        f.write(f'# Cherry-picked commits for {package_name}\n\n')
+        f.write('| Commit subject | Tags first seen | Associated labels |\n| --- | --- | --- |\n')
+        for commit_tuple in sorted(commit_tuples):
+            # sorted by timestamp
+            commit_link = f'{commit_tuple[1]}/commit/{commit_tuple[3]}'
+            tag_links = [f'[{t[0]}]({commit_tuple[1]}/tree/{t[0]}) ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[6]]
+            labels = [f'{t[0]} ({t[1]}, {datetime.fromtimestamp(t[2]).strftime("%Y-%m-%d %H:%M")})' for t in commit_tuple[7]]
+            f.write(f'| [{commit_tuple[2]}]({commit_link}) | {"<br>".join(tag_links)} | {"<br>".join(labels)} |\n')
+
+
+def make_history_markdown(package_name, history_list, output_markdown):
+    with open(output_markdown, 'w') as f:
+        f.write(f'# Tagging history for {package_name}\n\n')
+        f.write('| Started from | Created tag | Operator | Associated labels | Date |\n| --- | --- | --- | --- | --- |\n')
+        for tag_step in sorted(history_list):
+            # sorted by timestamp
+            start_from = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[2]})'
+            tag = f'[{tag_step[3]}]({tag_step[1]}/tree/{tag_step[3]})'
+            date_time = datetime.fromtimestamp(tag_step[0]).strftime("%Y-%m-%d %H:%M")
+            f.write(f'| {start_from} | {tag} | {tag_step[4]} | {"<br>".join(tag_step[5])} | {date_time} |\n')
+
+
+def make_label_markdown(packages_to_tag_history, output_markdown):
+    by_label = {}
+    for package_name, package_tuples in packages_to_tag_history.items():
+        for package_tuple in package_tuples.values():
+
+            for label in package_tuple[5]:
+                if label not in by_label:
+                    by_label[label] = {}
+                if package_name not in by_label[label]:
+                    by_label[label][package_name] = []
+                by_label[label][package_name].append(package_tuple)
+
+    with open(output_markdown, 'w') as f:
+        f.write('# Latest tags per label\n\n')
+        f.write('| Label | Package, tags |\n| --- | --- |\n')
+        for label, tuples_per_package in by_label.items():
+            package_write_string = []
+            for package_name, package_tuples in tuples_per_package.items():
+                # this will sort by timestamp
+                package_tuples.sort()
+                package_first = package_tuples[0]
+                package_write_string.append(f'{package_name}, [{package_first[3]}]({package_first[1]}/tree/{package_first[3]}), ({package_first[4]}, {datetime.fromtimestamp(package_first[0]).strftime("%Y-%m-%d %H:%M")})')
+            f.write(f'| {label} | {"<br>".join(package_write_string)} |\n')
+
+
+##########################################
+# main entrypoints steered from argparse #
+##########################################
+def run_cherry_pick_tag(args):
+    """
+    Entrypoint for cherry-picking and tagging
+    """
+
+    logger = get_logger()
+
+    config = read_yaml(args.config)
+    labels = get_labels(config)
+
+    if not labels:
+        logger.error('No labels given in %s', args.config)
+        return 1
+
+    # find out whether to retag something
+    packages_to_retag = []
+    if args.retag:
+        for package_name in args.retag:
+            packages_to_retag.append(PACKAGE_ALIASES.get(package_name, package_name))
+
+    already_tagged = []
+    to_tag = []
+
+    # First go through packages, clone them and checkout where we want to work with them
+    for package in get_packages(config):
+
+        # Add defaults for a few things if not given explicitly
+        complete_package_config(package, labels)
+
+        # check if the configuration is complete
+        if not check_package_config(package):
+            return 1
+        else:
+            logger.info('==> Sane!')
+
+        if not fetch(package) or not prepare_for_cherry_pick(package):
+            return 1
+        else:
+            logger.info('==> Checked out!')
+
+        # warn if this is tagged already with the target tag
+        tagged = git_verify(package)
+        if tagged and package['name'] not in packages_to_retag and 'all' not in packages_to_retag:
+            # if we found this to be done already, take it
+            already_tagged.append(package)
+            logger.warning('Package %s has the tag %s already. That might create problems if we re-tag. Run with --retag <pkg1> ... <pkgN> to force re-tagging.', package['name'], package['target_tag'])
+        else:
+            to_tag.append(package)
+
+    # now we should be in a position ready to cherry-pick and tag
+    for package in to_tag:
+
+        if not git_cherry_pick(package):
+            return 1
+        else:
+            logger.info('==> Cherry-picked!')
+
+        if not git_tag(package, retag=args.retag):
+            return 1
+        else:
+            logger.info('==> Tagged!')
+
+        if not closure(package):
+            return 1
+        else:
+            logger.info('==> Verified!')
+
+        # finalise, for instance, if we have cherry-picked to a branch, this is so far a temporary branch which needs to be moved to the target branch
+        finalise(package, args.operator)
+        # write the final summary to yaml for further processing
+        write_single_summary(package, args.output)
+
+    return 0
+
+
+def run_push_tagged(args):
+    """
+    Entrypoint for pushing newly tagged packages
+    """
+    config = read_yaml(args.config)
+    labels = get_labels(config)
+
+    logger = get_logger()
+
+    if not labels:
+        logger.error('No labels given in %s', args.config)
+        return 1
+
+    # Since we go
+    return_value = 0
+
+    # First go through packages, clone them and checkout where we want to work with them
+    for package_initial in get_packages(config):
+        # Add defaults for a few things if not given explicitly
+        complete_package_config(package_initial, labels)
+        summary_package_path = make_package_summary_path(package_initial, args.input)
+        # now actually, we take what was written in the summary because that has some information we might need
+        package_final = read_yaml(summary_package_path)
+        if not package_final:
+            logger.error('It seems no tagging has been done for package %s', package_initial['name'])
+            return_value = 1
+            continue
+        # and from that we push
+        if not push_tagged(package_final) and not package_final.get('pushed', False):
+            logger.error('Package %s has not been pushed it seems but it could also not be pushed now.', package_final['name'])
+            return_value = 1
+            continue
+        # Flag as being pushed,
+        package_final['pushed'] = True
+        write_yaml(package_final, summary_package_path)
+
+    return return_value
+
+
 def run_update_doc(args):
     """
     Entrypoint for updating the documentation based on new cherry-picks and tags
     """
-    # this is also where all git commands and stdout/stderr will go
-    LOG_FILE.append('o2dpg_asyncSW_update_doc.log')
+    logger = get_logger()
+
+    logger.info('Updating the documentation')
 
     # our documentation package
     # prepare
@@ -767,17 +804,26 @@ def run_update_doc(args):
     # go through all single package summary files that we can find
     # these have been created by run_cherry_pick_tag
     # we take each individual one, read it and add its commits, tags and labels to the overall summary
-    for path in listdir(args.input):
+    summary_file_names = listdir(args.input)
+    if not summary_file_names:
+        logger.warning('There is nothing to be updated.')
+        return 0
+
+    for path in summary_file_names:
 
         path = join(args.input, path)
         package = read_yaml(path)
 
         if not package:
-            print(f'WARNING: Cannot read {path}, probably not a YAML file. Skip...')
+            logger.warning('Cannot read %s, probably not a YAML file. Skip...', path)
             continue
 
         # this is a specific package
         package_name = package['name']
+
+        if not package.get('pushed', False):
+            logger.warning('Package %s does not seem to be pushed. Skip...', package_name)
+            continue
 
         packages_to_tag_history[package_name] = packages_to_tag_history.get(package_name, {})
         tag_history = packages_to_tag_history[package_name]
@@ -821,10 +867,11 @@ def run_update_doc(args):
         git_add(DPG_DOCS, join(git_add_dir, history_file_name))
 
     # make a page where we have a table that shows per label the latest tags of involved package
-    git_add_dir_file = join('docs', 'software', 'history', 'latest_tags.md')
-    output_markdown_file = join(DPG_DOCS['dir'], git_add_dir_file)
+    git_add_dir_file_name = 'latest_tags.md'
+    git_add_dir = join('docs', 'software', 'history')
+    output_markdown_file = join(DPG_DOCS['dir'], git_add_dir, git_add_dir_file_name)
     make_label_markdown(packages_to_tag_history, output_markdown_file)
-    git_add(DPG_DOCS, join(git_add_dir, output_markdown_file))
+    git_add(DPG_DOCS, join(git_add_dir, git_add_dir_file_name))
 
     # write and add the global summary YAML which will then be used again next time we cherry-pick
     write_yaml(packages_to_commit_summary, log_file_path)
@@ -834,7 +881,7 @@ def run_update_doc(args):
 
     # finish this by committing and pushing
     #git_commit(DPG_DOCS, 'Update accepted cherry-picks')
-    #sh(DPG_DOCS)
+    #git_push(DPG_DOCS)
 
     return 0
 
@@ -842,13 +889,13 @@ def run_update_doc(args):
 def run_init(args):
 
     if not args.operator:
-        print('ERROR: The --operator <operator-name> needs to be passed')
+        get_logger().error('The --operator <operator-name> needs to be passed')
         return 1
 
     init_config_path = join(ASYNC_DIR, 'config.yaml')
 
     if exists(init_config_path):
-        print('WARNING: Overwriting the global configuration.')
+        get_logger().warning('Overwriting the global configuration.')
 
     init_config = {'operator': args.operator}
 
@@ -859,20 +906,37 @@ def run_init(args):
 
 def run(args):
 
+    # first, setup the logger
+    formatter = logging.Formatter('%(levelname)s: %(message)s')
+    logger = get_logger()
+    logger.setLevel(logging.DEBUG)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+    log_file_path = f'{args.func.__name__}_{int(time())}.log'
+    file_handler = logging.FileHandler(log_file_path, 'w')
+    file_handler.setFormatter(formatter)
+    LOG_FILE.append(log_file_path)
+    logger.addHandler(file_handler)
+
     if not exists(ASYNC_DIR):
         makedirs(ASYNC_DIR)
 
     init_config_path = join(ASYNC_DIR, 'config.yaml')
 
     if not exists(init_config_path) and not args.operator:
-        print('ERROR: You need to specify the operator with --operator "Firstname Lastname" for a sub-command or run with sub-command init --operator "Firstname Lastname" once.')
+        logger.error('You need to specify the operator with --operator "Firstname Lastname" for a sub-command or run with sub-command init --operator "Firstname Lastname" once.')
         return 1
 
     init_config = read_yaml(init_config_path)
 
     args.operator = args.operator or init_config['operator']
 
-    return args.func(args)
+    return_value = args.func(args)
+
+    print(f'==> Log file is at {log_file_path}.')
+
+    return return_value
 
 
 if __name__ == '__main__':
