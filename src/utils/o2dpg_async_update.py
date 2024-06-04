@@ -390,15 +390,18 @@ def git_verify(package, rev=None):
 ###################################################
 # Additional helpers for the cherry-pick workflow #
 ###################################################
+def build_single_package_identifier(package):
+    return f'{package["name"]}_{package["start_from"]}_{package["target_tag"]}'
+
+
 def make_package_summary_path(package, summary_dir):
-    return join(summary_dir, f'{package["name"]}_{package["target_tag"]}.yaml')
+    return join(summary_dir, f'{build_single_package_identifier(package)}.yaml')
 
 
-def write_summary(package, operator, out_dir):
+def write_single_summary(package, out_dir):
     if not exists(out_dir):
         makedirs(out_dir)
     out_file = make_package_summary_path(package, out_dir)
-    package['operator'] = operator
     write_yaml(package, out_file)
 
 
@@ -454,7 +457,7 @@ def closure(package):
     return True
 
 
-def finalise(package):
+def finalise(package, operator):
     """
     Some final actions/afterburner steps after cherry-picking
     """
@@ -462,6 +465,7 @@ def finalise(package):
     to_push = [package['target_tag']]
     package['commits_success_subjects'] = subjects
     package['push'] = to_push
+    package['operator'] = operator
     cwd = package['dir']
     for commit in package['commits_cherry_picked']['success']:
         out = []
@@ -536,9 +540,35 @@ def make_history_markdown(package_name, history_list, output_markdown):
         for tag_step in sorted(history_list):
             # sorted by timestamp
             start_from = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[2]})'
-            tag = f'[{tag_step[2]}]({tag_step[1]}/tree/{tag_step[3]})'
+            tag = f'[{tag_step[3]}]({tag_step[1]}/tree/{tag_step[3]})'
             date_time = datetime.fromtimestamp(tag_step[0]).strftime("%Y-%m-%d %H:%M")
             f.write(f'| {start_from} | {tag} | {tag_step[4]} | {"<br>".join(tag_step[5])} | {date_time} |\n')
+
+
+def make_label_markdown(packages_to_tag_history, output_markdown):
+    by_label = {}
+    for package_name, package_tuples in packages_to_tag_history.items():
+        for package_tuple in package_tuples.values():
+            print(package_tuple)
+
+            for label in package_tuple[5]:
+                if label not in by_label:
+                    by_label[label] = {}
+                if package_name not in by_label[label]:
+                    by_label[label][package_name] = []
+                by_label[label][package_name].append(package_tuple)
+
+    with open(output_markdown, 'w') as f:
+        f.write('# Latest tags per label\n\n')
+        f.write('| Label | Package, tags |\n| --- | --- |\n')
+        for label, tuples_per_package in by_label.items():
+            package_write_string = []
+            for package_name, package_tuples in tuples_per_package.items():
+                # this will sort by timestamp
+                package_tuples.sort()
+                package_first = package_tuples[0]
+                package_write_string.append(f'{package_name}, [{package_first[3]}]({package_first[1]}/tree/{package_first[3]}), ({package_first[4]}, {datetime.fromtimestamp(package_first[0]).strftime("%Y-%m-%d %H:%M")})')
+            f.write(f'| {label} | {"<br>".join(package_write_string)} |\n')
 
 
 ##########################################
@@ -586,9 +616,10 @@ def run_cherry_pick_tag(args):
 
         # warn if this is tagged already with the target tag
         tagged = git_verify(package)
-        if tagged and package["name"] not in packages_to_retag and "all" not in packages_to_retag:
+        if tagged and package['name'] not in packages_to_retag and 'all' not in packages_to_retag:
+            # if we found this to be done already, take it
             already_tagged.append(package)
-            print(f'WARNING: Package {package["name"]} has the tag {package["target_tag"]} already. That might create problems if we re-tag. Run with --retag <pkg1> ... <pkgN> to force retagging.')
+            print(f'WARNING: Package {package["name"]} has the tag {package["target_tag"]} already. That might create problems if we re-tag. Run with --retag <pkg1> ... <pkgN> to force re-tagging.')
         else:
             to_tag.append(package)
 
@@ -611,9 +642,9 @@ def run_cherry_pick_tag(args):
             print('==> Verified!')
 
         # finalise, for instance, if we have cherry-picked to a branch, this is so far a temporary branch which needs to be moved to the target branch
-        finalise(package)
+        finalise(package, args.operator)
         # write the final summary to yaml for further processing
-        write_summary(package, args.operator, args.output)
+        write_single_summary(package, args.output)
 
     return 0
 
@@ -643,6 +674,54 @@ def run_push_tagged(args):
         push_tagged(package_final)
 
     return 0
+
+
+def update_tag_history(package, tag_history, timestamp):
+    # have a dictionary mapping start and target tag to a tuple where we collect information for this transition
+    # 0. timestamp (ms);
+    # 1. http url of package to construct some links from it;
+    # 2. start_from (this is a tag or branch name)
+    # 3. the tag that has been created based on the start
+    # 4. operator
+    # 5. list of associated labels
+    start_from = package['start_from']
+    tag = package['target_tag']
+    start_from_target_tag = f'{start_from}_{tag}'
+    if start_from_target_tag not in tag_history:
+        tag_history[start_from_target_tag] = [timestamp, package['http'], start_from, tag, package['operator'], package['labels']]
+
+
+def update_commits(package, d_package, timestamp):
+    # have a dictionary mapping a commit to a tuple where we collect information for this commit
+    # the tuple related to a commit looks like
+    # 0. timestamp (ms);
+    # 1. http url of package to construct some links from it;
+    # 2. commit subject;
+    # 3. commit hash so that we have it available after when using the tuples independent of the original dictionary;
+    # 4. list of tags this was cherry-picked in
+    # 5. list of associated labels (although somewhat redundant to the tags, keep it for clarity)
+    # 6. list of (tag, operator, timestamp) tuples
+    # 7. list of (label, operator, timestamp) tuples
+    operator = package['operator']
+    labels = package['labels']
+    tag = package['target_tag']
+
+    for subject, commit in zip(package['commits_success_subjects'], package['commits_cherry_picked']['success']):
+        if commit not in d_package:
+            # construct a tuple for this commit
+            d_package[commit] = [None, package['http'], subject, commit, [], [], [], []]
+        # for readability and direct access get the list mapped gto this commit
+        commit_tuple = d_package[commit]
+        # set the timestamp
+        # either it will be set for the first time when a new commit is found or it will be updated to bring it further up when sorting
+        commit_tuple[0] = timestamp
+        # add tag if not yet there (it shouldn't be there!)
+        if tag not in commit_tuple[4]:
+            commit_tuple[6].append([tag, operator, timestamp])
+        # there might be in general multiple labels associated with a tag, so extend
+        for label in labels:
+            if label not in commit_tuple[5]:
+                commit_tuple[7].append([label, operator, timestamp])
 
 
 def run_update_doc(args):
@@ -699,56 +778,14 @@ def run_update_doc(args):
 
         # this is a specific package
         package_name = package['name']
-        # also labels need to be added per commit
-        labels = package['labels']
-        operator = package['operator']
-        # we need the tag to be appended per commit
-        tag = package['target_tag']
-        start_from = package['start_from']
 
         packages_to_tag_history[package_name] = packages_to_tag_history.get(package_name, {})
         tag_history = packages_to_tag_history[package_name]
-        start_from_target_tag = f'{start_from}_{tag}'
+        update_tag_history(package, tag_history, timestamp)
 
-        # have a dictionary mapping start and target tag to a tuple where we collect information for this transition
-        # 0. timestamp (ms);
-        # 1. http url of package to construct some links from it;
-        # 2. start_from (this is a tag or branch name)
-        # 3. the tag that has been created based on the start
-        # 4. operator
-        # 5. list of associated labels
-        if start_from_target_tag not in tag_history:
-            tag_history[start_from_target_tag] = [timestamp, package['http'], start_from, tag, operator, labels]
-
-        # have a dictionary mapping a commit to a tuple where we collect information for this commit
-        # the tuple related to a commit looks like
-        # 0. timestamp (ms);
-        # 1. http url of package to construct some links from it;
-        # 2. commit subject;
-        # 3. commit hash so that we have it available after when using the tuples independent of the original dictionary;
-        # 4. list of tags this was cherry-picked in
-        # 5. list of associated labels (although somewhat redundant to the tags, keep it for clarity)
-        # 6. list of (tag, operator, timestamp) tuples
-        # 7. list of (label, operator, timestamp) tuples
         packages_to_commit_summary[package_name] = packages_to_commit_summary.get(package_name, {})
         d_package = packages_to_commit_summary[package_name]
-
-        for subject, commit in zip(package['commits_success_subjects'], package['commits_cherry_picked']['success']):
-            if commit not in d_package:
-                # construct a tuple for this commit
-                d_package[commit] = [None, package['http'], subject, commit, [], [], [], []]
-            # for readability and direct access get the list mapped gto this commit
-            commit_tuple = d_package[commit]
-            # set the timestamp
-            # either it will be set for the first time when a new commit is found or it will be updated to bring it further up when sorting
-            commit_tuple[0] = timestamp
-            # add tag if not yet there (it shouldn't be there!)
-            if tag not in commit_tuple[4]:
-                commit_tuple[6].append([tag, operator, timestamp])
-            # there might be in general multiple labels associated with a tag, so extend
-            for label in labels:
-                if label not in commit_tuple[5]:
-                    commit_tuple[7].append([label, operator, timestamp])
+        update_commits(package, d_package, timestamp)
 
     # this is the location where the markdowns will be written
     git_add_dir = join('docs', 'software', 'accepted')
@@ -783,6 +820,12 @@ def run_update_doc(args):
         # after creating/updating the file, add it
         git_add(DPG_DOCS, join(git_add_dir, history_file_name))
 
+    # make a page where we have a table that shows per label the latest tags of involved package
+    git_add_dir_file = join('docs', 'software', 'history', 'latest_tags.md')
+    output_markdown_file = join(DPG_DOCS['dir'], git_add_dir_file)
+    make_label_markdown(packages_to_tag_history, output_markdown_file)
+    git_add(DPG_DOCS, join(git_add_dir, output_markdown_file))
+
     # write and add the global summary YAML which will then be used again next time we cherry-pick
     write_yaml(packages_to_commit_summary, log_file_path)
     git_add(DPG_DOCS, git_log_file_path)
@@ -790,8 +833,8 @@ def run_update_doc(args):
     git_add(DPG_DOCS, git_tag_history_path)
 
     # finish this by committing and pushing
-    git_commit(DPG_DOCS, 'Update accepted cherry-picks')
-    git_push(DPG_DOCS)
+    #git_commit(DPG_DOCS, 'Update accepted cherry-picks')
+    #sh(DPG_DOCS)
 
     return 0
 
