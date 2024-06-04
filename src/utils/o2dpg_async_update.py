@@ -353,9 +353,12 @@ def git_cherry_pick(package):
     return True
 
 
-def git_tag(package, retag=False):
+def git_tag(package, retag=False, reset=True):
     """
-    Tag a package
+    Almost the same as simply tagging
+
+    However, do some checks in addition and emit errors if any.
+    Also, reset to where we started if tagging is not possible
     """
     package_name = package["name"]
     tag = package['target_tag']
@@ -371,7 +374,8 @@ def git_tag(package, retag=False):
             return False
 
     if run_command(f'git tag {tag}', cwd=cwd) != 0:
-        run_command(f'git reset --hard HEAD~{len(package["commits_cherry_picked"]["success"])}', cwd=cwd)
+        if reset:
+            run_command(f'git reset --hard HEAD~{len(package["commits_cherry_picked"]["success"])}', cwd=cwd)
         logger.error('Cannot tag %s with tag %s, reset everything.', cwd, tag)
         return False
 
@@ -403,6 +407,9 @@ def git_push(package):
 
 
 def git_verify(package, rev=None):
+    """
+    Git wrapper for git rev-parse --verify
+    """
     rev = package['target_tag'] if not rev else rev
     return run_command(f'git rev-parse --verify {rev}', cwd=package['dir']) == 0
 
@@ -411,14 +418,23 @@ def git_verify(package, rev=None):
 # Additional helpers for the cherry-pick workflow #
 ###################################################
 def build_single_package_identifier(package):
+    """
+    SHort wrapper to get a well-defined identifier per package
+    """
     return f'{package["name"]}_{package["start_from"]}_{package["target_tag"]}'
 
 
 def make_package_summary_path(package, summary_dir):
+    """
+    Extend the wrapper by the YAML extension and prepend an output directory
+    """
     return join(summary_dir, f'{build_single_package_identifier(package)}.yaml')
 
 
 def write_single_summary(package, out_dir):
+    """
+    Write the package dictionary to YAML
+    """
     if not exists(out_dir):
         makedirs(out_dir)
     out_file = make_package_summary_path(package, out_dir)
@@ -427,7 +443,7 @@ def write_single_summary(package, out_dir):
 
 def closure(package):
     """
-    Conduct kind of a closure test to see if all commits went in
+    Conduct kind of a closure test to see if all commits went in, tags are at the correct place
     """
     cwd = package['dir']
     tag = package['target_tag']
@@ -482,6 +498,9 @@ def closure(package):
 def finalise(package, operator):
     """
     Some final actions/afterburner steps after cherry-picking
+
+    1. If the work was done on a temporary branch, now is the point to update the actual branch
+    2. Add the title of the commit for successful and skipped commits
     """
     subjects = []
     to_push = [package['target_tag']]
@@ -734,7 +753,7 @@ def run_push_tagged(args):
         logger.error('No labels given in %s', args.config)
         return 1
 
-    # Since we go
+    # Try to do as much as possible, so cache the return value
     return_value = 0
 
     # First go through packages, clone them and checkout where we want to work with them
@@ -751,10 +770,12 @@ def run_push_tagged(args):
         # and from that we push
         if not push_tagged(package_final) and not package_final.get('pushed', False):
             logger.error('Package %s has not been pushed it seems but it could also not be pushed now.', package_final['name'])
+            # finally return with 1
             return_value = 1
             continue
-        # Flag as being pushed,
+        # Flag as being pushed so we can look that up later when needed.
         package_final['pushed'] = True
+        # make this flagging persistent by writing again the package summary
         write_yaml(package_final, summary_package_path)
 
     return return_value
@@ -867,11 +888,10 @@ def run_update_doc(args):
         git_add(DPG_DOCS, join(git_add_dir, history_file_name))
 
     # make a page where we have a table that shows per label the latest tags of involved package
-    git_add_dir_file_name = 'latest_tags.md'
-    git_add_dir = join('docs', 'software', 'history')
-    output_markdown_file = join(DPG_DOCS['dir'], git_add_dir, git_add_dir_file_name)
+    git_add_file = join(git_add_dir, 'latest_tags.md')
+    output_markdown_file = join(DPG_DOCS['dir'], git_add_file)
     make_label_markdown(packages_to_tag_history, output_markdown_file)
-    git_add(DPG_DOCS, join(git_add_dir, git_add_dir_file_name))
+    git_add(DPG_DOCS, git_add_file)
 
     # write and add the global summary YAML which will then be used again next time we cherry-pick
     write_yaml(packages_to_commit_summary, log_file_path)
@@ -887,7 +907,9 @@ def run_update_doc(args):
 
 
 def run_init(args):
-
+    """
+    To explicitly initialise
+    """
     if not args.operator:
         get_logger().error('The --operator <operator-name> needs to be passed')
         return 1
@@ -905,23 +927,36 @@ def run_init(args):
 
 
 def run(args):
+    """
+    Global entrypoint
 
+    Do some preparation and call the actual function to be executed
+    """
     # first, setup the logger
+    logging_directory = 'o2dpg_cherry_picks_logs'
+    if not exists(logging_directory):
+        makedirs(logging_directory)
     formatter = logging.Formatter('%(levelname)s: %(message)s')
     logger = get_logger()
+    # basically report everything
     logger.setLevel(logging.DEBUG)
+    # we want the output to go to the terminal...
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
-    log_file_path = f'{args.func.__name__}_{int(time())}.log'
+    # ...as well as to a file
+    log_file_path = join(logging_directory, f'{args.func.__name__}_{int(time())}.log')
     file_handler = logging.FileHandler(log_file_path, 'w')
     file_handler.setFormatter(formatter)
-    LOG_FILE.append(log_file_path)
     logger.addHandler(file_handler)
+    # make this file known globally so that it can potentially be written to by other parties
+    LOG_FILE.append(log_file_path)
 
+    # The internal config directory
     if not exists(ASYNC_DIR):
         makedirs(ASYNC_DIR)
 
+    # and the config file
     init_config_path = join(ASYNC_DIR, 'config.yaml')
 
     if not exists(init_config_path) and not args.operator:
@@ -929,9 +964,10 @@ def run(args):
         return 1
 
     init_config = read_yaml(init_config_path)
-
+    # if given explicitly, that operator takes precedence over the one in the global configuration
     args.operator = args.operator or init_config['operator']
 
+    # now finally do what the user wanted all along. Don't return immediately so that we can tell our user where the final log file went.
     return_value = args.func(args)
 
     print(f'==> Log file is at {log_file_path}.')
@@ -954,7 +990,7 @@ if __name__ == '__main__':
     init_parser = sub_parsers.add_parser('init', parents=[common_operator_parser])
     init_parser.set_defaults(func=run_init)
 
-    # rel-val
+    # cherry-picking and tagging
     tag_parser = sub_parsers.add_parser("tag", parents=[common_operator_parser])
     tag_parser.add_argument("config", help="The input configuration")
     tag_parser.add_argument("--retag", nargs="*", help='whether or not to force retagging of packages')
@@ -962,12 +998,14 @@ if __name__ == '__main__':
     tag_parser.add_argument('--output', help='Output directory where final YAML files will be written.', default='o2dpg_cherry_picks')
     tag_parser.set_defaults(func=run_cherry_pick_tag)
 
+    # push tagged packages
     push_parser = sub_parsers.add_parser("push", parents=[common_operator_parser])
     push_parser.add_argument("config", help="The input configuration")
     push_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     push_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     push_parser.set_defaults(func=run_push_tagged)
 
+    # update documentation with what has been tagged and pushed
     update_doc_parser = sub_parsers.add_parser("update-doc", parents=[common_operator_parser])
     update_doc_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
     update_doc_parser.set_defaults(func=run_update_doc)

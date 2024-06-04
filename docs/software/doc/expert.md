@@ -10,21 +10,40 @@ This is a description of some tooling that supports the following procedure:
 1. push these tags to the corresponding upstream repo,
 1. update the documentation page
 
-The [tool](o2dpg_async_update.py) is written in python. The following steps should be done one after the other.
+The [tool](../../../src/utils/o2dpg_async_update.py) is written in python. The following steps should be done one after the other.
 
 In the following, we will assume that the script is located in the directory `${ASYNC_BIN}`.
 
-It is strongly recommended to run all of the following in a **dedicated working directory** since running it creates additional output files.
-In addition, it checks out the git packages it works with. Since it manipulates them as well, there should not be any personal work done in those local packages.
+For those, the script knows for instance where to find the upstream repositories.
 
-Some additional default values of packages are defined for
+## General info
+
+### Packages concerned
+
+This tool handles by default the following packages:
 
 * O2,
 * O2DPG,
 * O2Physics,
 * QualityControl.
 
-For those, the script knows for instance where to find the upstream repositories.
+It does currently not support any other packages. However, an extension in that direction would be relatively trivial.
+
+### Log files
+
+Log files are always created. They contain the same information that is written in the terminal but also more, for instance all output when a git command is issued.
+As you will see below, there are various sub-commands that can be run. The log file name will be printed at the end of the execution and has the form of `o2dpg_cherry_picks_logs/<called-function>_<timestamp>.log`.
+
+### To be always up-to-date
+
+Accessing the upstream repos is done via SSH. If your private key is password protected, you might need to enter your password from time to time whenever a repo is cloned or the local ones are updated.
+Note that it is extremely important that - when running any cherry-picking and tagging - we make sure to really have the absolute latest and greatest state synced with upstream.
+This is why cloning and resetting of local history to the upstream repo is mandatory each time you cherry-pick or something else is updated.
+
+### Run in a dedicated directory
+
+It is strongly recommended to run all of the following in a **dedicated working directory** since running it creates additional output files.
+All repos that are cloned and used should be seen as part of the tool's data. Do not do any developments in these local repos since they are manipulated and any local developments that are there otherwise might be lost.
 
 ## Specifying the operator
 
@@ -51,27 +70,29 @@ packages:
       start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
       target_tag: <target-tag> # e.g. async-20240115.8.trd
       commits:
-      - <commit1>
-      - <commit2>
-      - ...
-      - <commitN>
+        - <commit1>
+        - <commit2>
+        - ...
+        - <commitN>
     - name: second package # e.g. O2
       start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
       target_tag: <target-tag> # e.g. async-20240115.8.trd
       commits:
-      - <commit1>
-      - <commit2>
-      - ...
-      - <commitN>
+        - <commit1>
+        - <commit2>
+        - ...
+        - <commitN>
     - name: third package # e.g. QualityControl
       start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
       target_tag: <target-tag> # e.g. async-20240115.8.trd
       commits:
-      - <commit1>
-      - <commit2>
-      - ...
-      - <commitN>
+        - <commit1>
+        - <commit2>
+        - ...
+        - <commitN>
 ```
+
+Another template for immediate use can be found [here](../../../src/utils/template_cherry_pick.py)
 
 In this case we are hence interested in
 
@@ -116,3 +137,5 @@ This will
 1. reset the local default branch to the upstream history,
 1. update a summary YAML (internal use) with everything that has been done in the previous steps,
 1. compile a markdown with everything that has ever been cherry-picked; each commit will be mapped to the tags it was first seen in and associated labels will also be added for completeness.
+
+**NOTE** that it will recognise the packages that have been pushed as well as those that have not been pushed to their upstream repos. The information of those packages that have not been pushed will not be taken into account when updating the documentation.
