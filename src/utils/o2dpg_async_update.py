@@ -75,33 +75,29 @@ def get_logger():
     return logging.getLogger('async_sw_logger')
 
 
-def run_command(cmd, log_file=None, cwd=None, stdout_list=None):
+def run_command(cmd, cwd=None, stdout_list=None):
     """
     Run a command
 
     Write to logfile or each line to a list
     """
-    if not log_file and LOG_FILE:
-        log_file = LOG_FILE[0]
+    logger = get_logger()
 
-    stdout, stderr = (None, None) if not log_file and stdout_list is None else (PIPE, STDOUT)
+    stdout, stderr = (None, None) if not logger and stdout_list is None else (PIPE, STDOUT)
     p = Popen(sh_split(cmd), cwd=cwd, stdout=stdout, stderr=stderr, universal_newlines=True)
 
-    if log_file:
-        log_file = open(log_file, 'a')
-        log_file.write(f'{cmd}\n')
+    if logger:
+        logger.debug(cmd)
 
-    if log_file or stdout_list is not None:
+    if logger or stdout_list:
         for line in p.stdout:
-            if log_file:
-                log_file.write(line)
+            line = line.strip()
+            if logger:
+                logger.debug(line)
             if stdout_list is not None:
-                stdout_list.append(line.strip())
+                stdout_list.append(line)
 
     p.wait()
-
-    if log_file:
-        log_file.close()
 
     return p.returncode
 
@@ -900,8 +896,8 @@ def run_update_doc(args):
     git_add(DPG_DOCS, git_tag_history_path)
 
     # finish this by committing and pushing
-    #git_commit(DPG_DOCS, 'Update accepted cherry-picks')
-    #git_push(DPG_DOCS)
+    git_commit(DPG_DOCS, 'Update accepted cherry-picks')
+    git_push(DPG_DOCS)
 
     return 0
 
@@ -942,6 +938,7 @@ def run(args):
     logger.setLevel(logging.DEBUG)
     # we want the output to go to the terminal...
     stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
     stream_handler.setFormatter(formatter)
     logger.addHandler(stream_handler)
     # ...as well as to a file
