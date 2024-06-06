@@ -24,6 +24,72 @@ AliceO2:
     - - async-2024-pp-cpass0
       - Benedikt Volkel
       - 1716913518
+  2ca79e08739836675ef4ab76cdc332d3f84c4aa6:
+  - 1717667967
+  - https://github.com/AliceO2Group/AliceO2
+  - 'DPL: Improve some signpost messages'
+  - 2ca79e08739836675ef4ab76cdc332d3f84c4aa6
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
+  2f8759bd14b8374d20fd33509e46f641324a55ee:
+  - 1717667967
+  - https://github.com/AliceO2Group/AliceO2
+  - ATO-615 - increase number of bins in phi, and decrease multiplicity range
+  - 2f8759bd14b8374d20fd33509e46f641324a55ee
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
+  725befe6c463d17b02a4bbeb198164dd42c91098:
+  - 1717667967
+  - https://github.com/AliceO2Group/AliceO2
+  - 'DPL: Throw error messages when the oldestPossibleTimeframe is incorrectly decreased'
+  - 725befe6c463d17b02a4bbeb198164dd42c91098
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
   78e868c40c6d870969ec0562d81c1599048addc2:
   - 1716890125452
   - https://github.com/AliceO2Group/AliceO2
@@ -37,6 +103,50 @@ AliceO2:
   - - - async-2022-pp-apass4
       - Benedikt Volkel
       - 1716913518
+  877eba6e317acc2675671c22fdd97126494ecd59:
+  - 1717667967
+  - https://github.com/AliceO2Group/AliceO2
+  - '#13173 - fixing DCA for combined tracking + adding nshared clusters (#13176)'
+  - 877eba6e317acc2675671c22fdd97126494ecd59
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
+  a82ab47069e7b37e67b657f39dd764a26afd8cee:
+  - 1717667967
+  - https://github.com/AliceO2Group/AliceO2
+  - 'DPL: Fix detection of first device in topology'
+  - a82ab47069e7b37e67b657f39dd764a26afd8cee
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
   b518797699ab5f113be52093a5a5209358a43ff3:
   - 1716913518
   - https://github.com/AliceO2Group/AliceO2
@@ -200,6 +310,28 @@ O2DPG:
     - - async-2024-pp-cpass0
       - Benedikt Volkel
       - 1716913518
+  3212a61353bb460b6ee1d1882510e14abe8d5416:
+  - 1717667967
+  - https://github.com/AliceO2Group/O2DPG
+  - '[Anchor] Use dynamic resource estimate for SimWF (#1640)'
+  - 3212a61353bb460b6ee1d1882510e14abe8d5416
+  - []
+  - []
+  - - - async-v1-01-05
+      - Benedikt Volkel
+      - 1717667967
+  - - - async-2023-pbpb-apass4
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-apass1
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2022-pp-apass7
+      - Benedikt Volkel
+      - 1717667967
+    - - async-2024-pp-cpass0
+      - Benedikt Volkel
+      - 1717667967
   62f23cbab5b5f205d1f484644ae18420e359a261:
   - 1716913518
   - https://github.com/AliceO2Group/O2DPG
