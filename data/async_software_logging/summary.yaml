@@ -398,6 +398,19 @@ O2DPG:
     - - async-2024-pp-cpass0
       - Benedikt Volkel
       - 1716913518
+  6d4924eef63aaf6f4922b2fe2691fffbd0387fb7:
+  - 1717750369
+  - https://github.com/AliceO2Group/O2DPG
+  - Update hypernuclei gun for pp
+  - 6d4924eef63aaf6f4922b2fe2691fffbd0387fb7
+  - []
+  - []
+  - - - async-2022-apass4-pp-mc.4f
+      - Chiara Zampolli
+      - 1717750369
+  - - - async-2022-pp-apass4
+      - Chiara Zampolli
+      - 1717750369
   721e4c7271583215e04025729b67d9553b9c9f31:
   - 1716913518
   - https://github.com/AliceO2Group/O2DPG
