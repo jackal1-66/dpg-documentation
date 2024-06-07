@@ -6,6 +6,13 @@ AliceO2:
   - async-20240229.pbpb.2d
   - Chiara Zampolli
   - - async-2022-pp-apass4
+  async-20240229.pp.2_async-20240229.pp.2a:
+  - 1717752286
+  - https://github.com/AliceO2Group/AliceO2
+  - async-20240229.pp.2
+  - async-20240229.pp.2a
+  - Benedikt Volkel
+  - - async-2023-pp-apass4
   async-v1-01-branch_async-v1-01-05:
   - 1717667967
   - https://github.com/AliceO2Group/AliceO2
@@ -38,6 +45,13 @@ O2DPG:
   - async-20240229.pbpb.2f
   - Chiara Zampolli
   - - async-2022-pp-apass4
+  async-20240229.pp.2b_async-20240229.pp.2c:
+  - 1717752286
+  - https://github.com/AliceO2Group/O2DPG
+  - async-20240229.pp.2b
+  - async-20240229.pp.2c
+  - Benedikt Volkel
+  - - async-2023-pp-apass4
   async-v1-01-branch_async-v1-01-05:
   - 1717667967
   - https://github.com/AliceO2Group/O2DPG
