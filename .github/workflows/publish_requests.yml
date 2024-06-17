@@ -1,9 +1,9 @@
 name: Update with requested PRs
 on:
   workflow_dispatch:
-  # schedule: # run Tuesdays and Wednesdays at 12:00
-  #   - cron: '0 12 * * 2'
-  #   - cron: '0 12 * * 3'
+  schedule: # run Tuesdays and Wednesdays at 12:00
+    - cron: '0 12 * * 2'
+    - cron: '0 12 * * 3'
 jobs:
   pr-requests:
     runs-on: ubuntu-latest
@@ -137,6 +137,39 @@ jobs:
                   }
                 }
               }
+              O2Physics: repository(owner: "AliceO2Group", name: "O2Physics") {
+                pullRequests(first: 100, states: [MERGED, OPEN], orderBy: { field: UPDATED_AT, direction: DESC }) {
+                  nodes {
+                    title
+                    createdAt
+                    updatedAt
+                    mergedAt
+                    number
+                    labels(first:10) {
+                      edges{
+                        node {
+                          name
+                        }
+                      }
+                    }
+                    state
+                    url
+                    author {
+                      login
+                    }
+                    mergeCommit {
+                      oid
+                    }
+                    commits(first: 10) {
+                      nodes {
+                        commit {
+                          oid
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
 
       - name: Store PRs
@@ -151,23 +184,24 @@ jobs:
         run: |
           import json
 
-          def get_prs(prs):
+          def sort_prs(prs):
               # Need to sort by
               # - MERGED or OPEN
               #   - async-labels
               #     - mergedAt or updatedAt
               prs_dict = {}
 
-              pr_numbers = []
+              repo_pr_numbers = []
 
               for pr in prs:
 
-                  number = pr['number']
+                  repo_name = pr['repo_name']
+                  repo_name_number = (repo_name, pr['number'])
 
-                  if number in pr_numbers:
+                  if repo_name_number in repo_pr_numbers:
                       continue
 
-                  pr_numbers.append(number)
+                  repo_pr_numbers.append(repo_name_number)
 
                   flag = pr['state']
 
@@ -199,55 +233,61 @@ jobs:
                           continue
 
                       if label_name not in prs_dict[flag]:
-                          prs_dict[flag][label_name] = []
+                          prs_dict[flag][label_name] = {}
 
-                      prs_dict[flag][label_name].append(pr)
+                      if repo_name not in prs_dict[flag][label_name]:
+                          prs_dict[flag][label_name][repo_name] = []
+
+                      prs_dict[flag][label_name][repo_name].append(pr)
 
               return prs_dict
 
 
-          def make_report(prs, repo_name, outfile):
-              prs = prs.get('pullRequests', {}).get('nodes', None)
-              if not prs:
-                  # nothing found
-                  return
-
-              prs_dict = get_prs(prs)
+          def make_report(flag, prs_per_label, outfile):
 
               with open(outfile, 'w') as f:
+                  f.write(f'# List PRs in state {flag} (from oldest to recent)\n')
 
-                  f.write(f'# List PRs for {repo_name} (from oldest to recent)\n')
+                  for label_name, prs_per_repo in prs_per_label.items():
 
-                  # first put the merged PRs
-                  for state, prs_per_label in prs_dict.items():
+                      f.write(f'\n\n### For label {label_name}\n\n')
 
-                      f.write(f'\n\n## PRs in state {state}')
+                      if flag == 'MERGED':
+                          sort_by_field = 'mergedAt'
+                          common_header = '| Author | Package | PR | PR title | Merged at | #original commits | Merge commit |\n| --- | --- | --- | --- | --- | --- | --- |\n'
+                      else:
+                          sort_by_field = 'updatedAt'
+                          common_header = '| Author | Package | PR | PR title | Updated at | #original commits | Merge commit |\n| --- | --- | --- | --- | --- | --- | --- |\n'
 
-                      for label_name, pr_list in prs_per_label.items():
+                      f.write(common_header)
 
-                          f.write(f'\n\n### For label {label_name}\n\n')
+                      for repo_name, prs in prs_per_repo.items():
+                          sort_by = [pr[sort_by_field] for pr in prs]
+                          for s, pr in sorted(zip(sort_by, prs)):
+                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {s} | {len(pr["commits"]["nodes"])} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
-                          sort_by = [pr['mergedAt'] for pr in pr_list]
-                          common_header = '| Author | Package | PR | PR title | State | Merged at |\n| --- | --- | --- | --- | --- | --- |\n'
-
-                          if None in sort_by:
-                              sort_by = [pr['updatedAt'] for pr in pr_list]
-                              common_header = '| Author | Package | PR | PR title | State | Updated at |\n| --- | --- | --- | --- | --- | --- |\n'
-
-                          f.write(common_header)
-
-                          for s, pr in sorted(zip(sort_by, pr_list)):
-                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {state} | {s} |\n')
 
           def make_markdowns(prs_json):
-              prs = None
-              with open(prs_json, 'r') as f:
-                  prs = json.load(f)
+              # a list of all PRs
+              prs = []
 
-              for repo_name, prs_repo in prs.items():
-                  if repo_name not in ['AliceO2', 'O2DPG', 'QualityControl']:
+              with open(prs_json, 'r') as f:
+                  prs_github = json.load(f)
+
+              for repo_name, prs_repo in prs_github.items():
+                  if repo_name not in ('AliceO2', 'O2DPG', 'QualityControl', 'O2Physics'):
                       continue
-                  make_report(prs_repo, repo_name, f'dpg_pr_report_{repo_name}.md')
+
+                  for pr in prs_repo.get('pullRequests', {}).get('nodes', []):
+                      # add the repo name manually, otherwise we would also need to query it in addition from GitHub; but we know what we are asking for in the initial query
+                      pr['repo_name'] = repo_name
+                      prs.append(pr)
+
+              # sort before further processing (by state, label and merge/update timestamp)
+              prs = sort_prs(prs)
+
+              for flag, prs_per_label in prs.items():
+                  make_report(flag, prs_per_label, f'dpg_pr_report_{flag}.md')
 
           make_markdowns('prs.json')
 
