@@ -193,6 +193,29 @@ def get_labels(config):
         get_logger().error('Cannot get labels. Make sure to specify a list of labels under the key "labels".')
 
 
+def check_tag_config_by_user(config, labels):
+    """
+    Ask the user again about their settings
+    """
+    logger = get_logger()
+    logger.info('Cross-checking user config')
+    logger.info('Are you sure you want to tag for the following labels [y/N]?\n%s', '\n'.join(labels))
+    yes_no = input()
+
+    if not yes_no or yes_no.lower() != 'y':
+        logger.info('It seems you are not satisfied with your label settings.')
+        return False
+
+    for package in get_packages(config):
+        logger.info('Do you want to tag the following package [y/N]?\nName: %s\nStart from: %s\nTarget tag: %s', package['name'], package['start_from'], package['tag'])
+        yes_no = input()
+        if not yes_no or yes_no.lower() != 'y':
+            logger.info('It seems you are not satisfied with your tag settings.')
+            return False
+
+    return True
+
+
 #########################
 # Git-related utilities #
 #########################
@@ -675,6 +698,10 @@ def run_cherry_pick_tag(args):
         logger.error('No labels given in %s', args.config)
         return 1
 
+    if not check_tag_config_by_user(config, labels):
+        # ask the user again to make sure they have a second chance to check their config before proceeding
+        return 1
+
     # find out whether to retag something
     packages_to_retag = []
     if args.retag:
@@ -683,6 +710,7 @@ def run_cherry_pick_tag(args):
 
     already_tagged = []
     to_tag = []
+
 
     # First go through packages, clone them and checkout where we want to work with them
     for package in get_packages(config):
