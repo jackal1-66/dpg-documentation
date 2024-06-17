@@ -452,15 +452,6 @@ jobs:
 
                   for label_name in label_names:
 
-                      if label_name.endswith('-accepted'):
-                          # only go ahead if not yet accepted
-                          continue
-
-                      # check if the accepted label is already there
-                      accepted_label_name = f'{label_name}-accepted'
-                      if accepted_label_name in label_names:
-                          continue
-
                       if label_name not in prs_dict[flag]:
                           prs_dict[flag][label_name] = {}
 
