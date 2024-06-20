@@ -255,7 +255,11 @@ jobs:
                       for repo_name, prs in prs_per_repo.items():
                           sort_by = [pr[sort_by_field] for pr in prs]
                           for s, pr in sorted(zip(sort_by, prs)):
-                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {s} | {len(pr["commits"]["nodes"])} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
+                              # we fetch at most 10 commits, make that clear
+                              n_commits = len(pr["commits"]["nodes"])
+                              if n_commits >= 10:
+                                n_commits = f'at least {n_commits}'
+                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {s} | {n_commits} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
 
           def make_markdowns(prs_json):

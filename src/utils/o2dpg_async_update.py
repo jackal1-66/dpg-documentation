@@ -20,21 +20,25 @@ ASYNC_DIR = '.o2dpg_async_update'
 # per package
 DEFAULTS_O2 = {'upstream': 'git@github.com:AliceO2Group/AliceO2.git',
                'http': 'https://github.com/AliceO2Group/AliceO2',
+               'name': 'O2',
                'dir': 'O2',
                'default_branch': 'dev'}
 
 DEFAULTS_O2DPG = {'upstream': 'git@github.com:AliceO2Group/O2DPG.git',
                   'http': 'https://github.com/AliceO2Group/O2DPG',
+                  'name': 'O2DPG',
                   'dir': 'O2DPG',
                   'default_branch': 'master'}
 
 DEFAULTS_O2PHYSICS = {'upstream': 'git@github.com:AliceO2Group/O2Physics.git',
                       'http': 'https://github.com/AliceO2Group/O2Physics',
+                      'name': 'O2Physics',
                       'dir': 'O2Physics',
                       'default_branch': 'master'}
 
 DEFAULTS_QC = {'upstream': 'git@github.com:AliceO2Group/QualityCOntrol.git',
                'http': 'https://github.com/AliceO2Group/QualityControl',
+               'name': 'QualityControl',
                'dir': 'QualityControl',
                'default_branch': 'master'}
 
@@ -143,18 +147,24 @@ def get_default(package_name):
     return {}
 
 
-def complete_package_config(package, labels=None):
+def complete_package_config_with_defaults(package, labels=None):
     """
     Add some default values if not set
     This works inline on the package dict
     """
     # First, let's set the name to the GitHub upstream repo name in case of aliases
-    package['name'] = PACKAGE_ALIASES.get(package['name'], package['name'])
+    try:
+        package['name'] = PACKAGE_ALIASES.get(package['name'], package['name'])
+    except KeyError:
+        get_logger.error('Key "name" is missing in the package configuration')
+        return False
     package['labels'] = labels or []
     package['commits_cherry_picked'] = {'success': [], 'skipped': [], 'failed': []}
     package_defaults = get_default(package['name'])
     for key, default_value in package_defaults.items():
         package[key] = package.get(key, default_value)
+
+    return True
 
 
 def check_package_config(package):
@@ -207,7 +217,7 @@ def check_tag_config_by_user(config, labels):
         return False
 
     for package in get_packages(config):
-        logger.info('Do you want to tag the following package [y/N]?\nName: %s\nStart from: %s\nTarget tag: %s', package['name'], package['start_from'], package['tag'])
+        logger.info('Do you want to tag the following package [y/N]?\nName: %s\nStart from: %s\nTarget tag: %s', package['name'], package['start_from'], package['target_tag'])
         yes_no = input()
         if not yes_no or yes_no.lower() != 'y':
             logger.info('It seems you are not satisfied with your tag settings.')
@@ -302,6 +312,15 @@ def prepare_for_cherry_pick(package):
     return True
 
 
+def expand_commit_hash(package, commit):
+    """
+    Always return the long commit hash
+    """
+    out = []
+    run_command(f'git rev-parse {commit}', cwd=package['dir'], stdout_list=out)
+    return out[0]
+
+
 def cherry_pick_single(cwd, commit):
     """
     Utility to cherry-pick per commit
@@ -345,6 +364,8 @@ def git_cherry_pick(package):
     cwd = package['dir']
 
     for commit in package['commits']:
+        # get the long hash to always use that for consistency
+        commit = expand_commit_hash(package, commit)
         ret = cherry_pick_single(cwd, commit)
         if isinstance(ret, list):
             logger.error('There was a problem cherry-picking %s', commit)
@@ -716,7 +737,8 @@ def run_cherry_pick_tag(args):
     for package in get_packages(config):
 
         # Add defaults for a few things if not given explicitly
-        complete_package_config(package, labels)
+        if not complete_package_config_with_defaults(package, labels):
+            return 1
 
         # check if the configuration is complete
         if not check_package_config(package):
@@ -738,7 +760,8 @@ def run_cherry_pick_tag(args):
         else:
             to_tag.append(package)
 
-    # now we should be in a position ready to cherry-pick and tag
+    # now we should be in a position ready to cherry-pick
+    # do only the cherry-picking first so that we can see if that works. Only if all packages were successful, we move on with tagging
     for package in to_tag:
 
         if not git_cherry_pick(package):
@@ -746,6 +769,7 @@ def run_cherry_pick_tag(args):
         else:
             logger.info('==> Cherry-picked!')
 
+    for package in to_tag:
         if not git_tag(package, retag=args.retag):
             return 1
         else:
@@ -783,7 +807,8 @@ def run_push_tagged(args):
     # First go through packages, clone them and checkout where we want to work with them
     for package_initial in get_packages(config):
         # Add defaults for a few things if not given explicitly
-        complete_package_config(package_initial, labels)
+        if not complete_package_config_with_defaults(package_initial, labels):
+            return 1
         summary_package_path = make_package_summary_path(package_initial, args.input)
         # now actually, we take what was written in the summary because that has some information we might need
         package_final = read_yaml(summary_package_path)
@@ -934,14 +959,22 @@ def run_init(args):
     """
     To explicitly initialise
     """
+
+    logger = get_logger()
+
+    if args.fetch:
+        # fetch everything already, e.g. if people would like to check things inside before moving to the actual tagging task
+        for package_name, package in DEFAULTS.items():
+            logger.info('Fetch %s', package_name)
+            fetch(package)
+
     if not args.operator:
-        get_logger().error('The --operator <operator-name> needs to be passed')
-        return 1
+        return 0
 
     init_config_path = join(ASYNC_DIR, 'config.yaml')
 
     if exists(init_config_path):
-        get_logger().warning('Overwriting the global configuration.')
+        logger.warning('Overwriting the global configuration.')
 
     init_config = {'operator': args.operator}
 
@@ -957,7 +990,7 @@ def run(args):
     Do some preparation and call the actual function to be executed
     """
     # first, setup the logger
-    logging_directory = 'o2dpg_cherry_picks_logs'
+    logging_directory = join('o2dpg_cherry_picks_logs', datetime.fromtimestamp(int(time())).strftime("%Y%m%d"))
     if not exists(logging_directory):
         makedirs(logging_directory)
     formatter = logging.Formatter('%(levelname)s: %(message)s')
@@ -1013,13 +1046,13 @@ if __name__ == '__main__':
 
     # init
     init_parser = sub_parsers.add_parser('init', parents=[common_operator_parser])
+    init_parser.add_argument('--fetch', action='store_true', help='Fetch already the default packages once')
     init_parser.set_defaults(func=run_init)
 
     # cherry-picking and tagging
     tag_parser = sub_parsers.add_parser("tag", parents=[common_operator_parser])
     tag_parser.add_argument("config", help="The input configuration")
     tag_parser.add_argument("--retag", nargs="*", help='whether or not to force retagging of packages')
-    tag_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     tag_parser.add_argument('--output', help='Output directory where final YAML files will be written.', default='o2dpg_cherry_picks')
     tag_parser.set_defaults(func=run_cherry_pick_tag)
 
@@ -1027,7 +1060,6 @@ if __name__ == '__main__':
     push_parser = sub_parsers.add_parser("push", parents=[common_operator_parser])
     push_parser.add_argument("config", help="The input configuration")
     push_parser.add_argument('--input', help='Input directory where final YAML files are written.', default='o2dpg_cherry_picks')
-    push_parser.add_argument('--log-file', dest='log_file', help='Log file to output git commands and stdout/stderr to')
     push_parser.set_defaults(func=run_push_tagged)
 
     # update documentation with what has been tagged and pushed
