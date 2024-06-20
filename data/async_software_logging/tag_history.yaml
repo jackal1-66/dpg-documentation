@@ -23,6 +23,16 @@ AliceO2:
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+  async-v1-01-branch_async-v1-01-06:
+  - 1718898969
+  - https://github.com/AliceO2Group/AliceO2
+  - async-v1-01-branch
+  - async-v1-01-06
+  - Benedikt Volkel
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
 O2DPG:
   async-2022-apass4-pp-mc.4e_async-2022-apass4-pp-mc.4f:
   - 1717400258
@@ -62,6 +72,16 @@ O2DPG:
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+  async-v1-01-branch_async-v1-01-06:
+  - 1718898969
+  - https://github.com/AliceO2Group/O2DPG
+  - async-v1-01-branch
+  - async-v1-01-06
+  - Benedikt Volkel
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
 O2Physics:
   async-v1-01-branch_async-v1-01-05:
   - 1717667967
@@ -73,12 +93,32 @@ O2Physics:
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+  async-v1-01-branch_async-v1-01-06:
+  - 1718898969
+  - https://github.com/AliceO2Group/O2Physics
+  - async-v1-01-branch
+  - async-v1-01-06
+  - Benedikt Volkel
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
 QualityControl:
   async-v1-01-branch_async-v1-01-05:
   - 1717667967
   - https://github.com/AliceO2Group/QualityControl
   - async-v1-01-branch
   - async-v1-01-05
+  - Benedikt Volkel
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  async-v1-01-branch_async-v1-01-06:
+  - 1718898969
+  - https://github.com/AliceO2Group/QualityControl
+  - async-v1-01-branch
+  - async-v1-01-06
   - Benedikt Volkel
   - - async-2023-pbpb-apass4
     - async-2024-pp-apass1
