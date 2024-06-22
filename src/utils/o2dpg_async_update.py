@@ -36,7 +36,7 @@ DEFAULTS_O2PHYSICS = {'upstream': 'git@github.com:AliceO2Group/O2Physics.git',
                       'dir': 'O2Physics',
                       'default_branch': 'master'}
 
-DEFAULTS_QC = {'upstream': 'git@github.com:AliceO2Group/QualityCOntrol.git',
+DEFAULTS_QC = {'upstream': 'git@github.com:AliceO2Group/QualityControl.git',
                'http': 'https://github.com/AliceO2Group/QualityControl',
                'name': 'QualityControl',
                'dir': 'QualityControl',
@@ -321,6 +321,26 @@ def expand_commit_hash(package, commit):
     return out[0]
 
 
+def sort_commits(package):
+    """
+    Get the list of commits sorted from oldest to most recent
+    """
+    logger = get_logger()
+
+    commits = [expand_commit_hash(package, commit) for commit in package['commits']]
+
+    logger.info('Sort commits from oldest to most recent')
+    out = []
+    run_command(f'git rev-list {package["default_branch"]}', cwd=package['dir'], stdout_list=out)
+    out = [o for o in out if o in commits]
+
+    if len(out) != len(commits):
+        logger.error('During sorting, some of the original commits seem not to be recognised.')
+        return None
+
+    return reversed(out)
+
+
 def cherry_pick_single(cwd, commit):
     """
     Utility to cherry-pick per commit
@@ -363,9 +383,13 @@ def git_cherry_pick(package):
 
     cwd = package['dir']
 
-    for commit in package['commits']:
+    sorted_commits = sort_commits(package)
+    if sorted_commits is None:
+        logger.error('Commits of package %s could not be sorted', package['name'])
+        return False
+
+    for commit in sorted_commits:
         # get the long hash to always use that for consistency
-        commit = expand_commit_hash(package, commit)
         ret = cherry_pick_single(cwd, commit)
         if isinstance(ret, list):
             logger.error('There was a problem cherry-picking %s', commit)
@@ -586,6 +610,7 @@ def push_tagged(package):
     cwd = package['dir']
 
     for to_push in package['push']:
+        logger.info('Attempt to push %s of package %s', to_push, package_name)
         out = []
         if run_command(f'git push origin {to_push}', cwd=cwd, stdout_list=out) != 0:
             logger.warning('Could not push %s due to', to_push)
@@ -596,10 +621,11 @@ def push_tagged(package):
         for line in out:
             if 'Everything up-to-date' in line:
                 logger.info('%s of package %s was already upstream.', to_push, package_name)
-                return True
+                break
 
         logger.info('Pushed %s of package %s.', to_push, package_name)
-        return True
+
+    return True
 
 
 #####################################################
