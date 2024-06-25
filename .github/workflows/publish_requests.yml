@@ -183,6 +183,8 @@ jobs:
         shell: python
         run: |
           import json
+          from time import time
+          from datetime import datetime
 
           def sort_prs(prs):
               # Need to sort by
@@ -237,7 +239,8 @@ jobs:
           def make_report(flag, prs_per_label, outfile):
 
               with open(outfile, 'w') as f:
-                  f.write(f'# List PRs in state {flag} (from oldest to recent)\n')
+
+                  f.write(f'# List PRs in state {flag} (from oldest to recent per package), last update: {datetime.fromtimestamp(int(time())).strftime("%Y-%m-%d %H:%M")} \n')
 
                   for label_name, prs_per_repo in prs_per_label.items():
 
