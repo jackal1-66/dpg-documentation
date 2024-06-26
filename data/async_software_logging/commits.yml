@@ -660,6 +660,26 @@ O2DPG:
     - '1717751807'
     - '1717751893'
     - '1719323950'
+  328c82607d5fa7e3410ddd9b4cb37f5737ac8adf:
+  - '1719423478'
+  - 328c82607d5fa7e3410ddd9b4cb37f5737ac8adf
+  - 'PWGHF: fix PDG code of L(1520) in Lc decays. (#1673)'
+  - - async-v1-01-09
+    - async-v1-01-09
+    - async-v1-01-09
+    - async-v1-01-09
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Benedikt Volkel
+    - Benedikt Volkel
+    - Benedikt Volkel
+    - Benedikt Volkel
+  - - '1719423478'
+    - '1719423478'
+    - '1719423478'
+    - '1719423478'
   3362e43f2fec01d56e59752f25480e43956699c8:
   - '1718898969'
   - 3362e43f2fec01d56e59752f25480e43956699c8
@@ -1004,6 +1024,26 @@ O2DPG:
     - '1717400258'
     - '1717751807'
     - '1719323950'
+  96c75a633e49218bec316e06a91bd05c2ba7dbac:
+  - '1719423478'
+  - 96c75a633e49218bec316e06a91bd05c2ba7dbac
+  - 'PWGHF: Add possibility to pass pT-hard bins from script (#1674)'
+  - - async-v1-01-09
+    - async-v1-01-09
+    - async-v1-01-09
+    - async-v1-01-09
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Benedikt Volkel
+    - Benedikt Volkel
+    - Benedikt Volkel
+    - Benedikt Volkel
+  - - '1719423478'
+    - '1719423478'
+    - '1719423478'
+    - '1719423478'
   985c3e6586dc785ef1ea5dcf7841ab80d2bd4464:
   - '1715849744'
   - 985c3e6586dc785ef1ea5dcf7841ab80d2bd4464
