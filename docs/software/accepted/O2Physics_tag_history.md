@@ -1,0 +1,32 @@
+# Tagging history for O2Physics
+
+| Started from | Created tag | Operator | Associated labels | Date |
+| --- | --- | --- | --- | --- |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20221209.1-alidist-master](https://github.com/AliceO2Group/O2Physics/tree/async-20221209.1-alidist-master) | UNKNOWN OPERATOR | NO LABEL | 1670591193 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20221212.1-alidist-master](https://github.com/AliceO2Group/O2Physics/tree/async-20221212.1-alidist-master) | UNKNOWN OPERATOR | NO LABEL | 1670850899 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230408.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230408.1) | UNKNOWN OPERATOR | NO LABEL | 1680937189 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230515.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230515.1) | UNKNOWN OPERATOR | NO LABEL | 1684165711 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230904.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230904.1) | UNKNOWN OPERATOR | NO LABEL | 1693835977 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230908.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230908.1) | UNKNOWN OPERATOR | NO LABEL | 1694157927 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230918.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230918.1) | UNKNOWN OPERATOR | NO LABEL | 1695025720 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230920.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230920.1) | UNKNOWN OPERATOR | NO LABEL | 1695209232 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230923.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230923.1) | UNKNOWN OPERATOR | NO LABEL | 1695496818 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230925.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230925.1) | UNKNOWN OPERATOR | NO LABEL | 1695626689 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230925.2](https://github.com/AliceO2Group/O2Physics/tree/async-20230925.2) | UNKNOWN OPERATOR | NO LABEL | 1695627070 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20230929.1](https://github.com/AliceO2Group/O2Physics/tree/async-20230929.1) | UNKNOWN OPERATOR | NO LABEL | 1696001989 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231013.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231013.1) | UNKNOWN OPERATOR | NO LABEL | 1697205277 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231025.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231025.1) | UNKNOWN OPERATOR | NO LABEL | 1698268306 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231121.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231121.1) | UNKNOWN OPERATOR | NO LABEL | 1700574202 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231127.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231127.1) | UNKNOWN OPERATOR | NO LABEL | 1701120749 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231128.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231128.1) | UNKNOWN OPERATOR | NO LABEL | 1701189377 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231204.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231204.1) | UNKNOWN OPERATOR | NO LABEL | 1701678037 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20231213.1](https://github.com/AliceO2Group/O2Physics/tree/async-20231213.1) | UNKNOWN OPERATOR | NO LABEL | 1702505678 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-20240207.1](https://github.com/AliceO2Group/O2Physics/tree/async-20240207.1) | UNKNOWN OPERATOR | NO LABEL | 1707320330 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-v1-01-01](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-01) | UNKNOWN OPERATOR | NO LABEL | 1714777991 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-v1-01-02](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-02) | UNKNOWN OPERATOR | NO LABEL | 1714777991 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-v1-01-03](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-03) | UNKNOWN OPERATOR | NO LABEL | 1714777991 |
+| [UNKNOWN START](https://github.com/AliceO2Group/O2Physics/tree/UNKNOWN START) | [async-v1-01-04](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-04) | UNKNOWN OPERATOR | NO LABEL | 1714777991 |
+| [async-v1-01-branch](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-branch) | [async-v1-01-05](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-05) | Benedikt Volkel | async-2023-pbpb-apass4<br>async-2024-pp-apass1<br>async-2022-pp-apass7<br>async-2024-pp-cpass0 | 1717667967 |
+| [async-v1-01-branch](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-branch) | [async-v1-01-06](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-06) | Benedikt Volkel | async-2023-pbpb-apass4<br>async-2024-pp-apass1<br>async-2022-pp-apass7<br>async-2024-pp-cpass0 | 1718898969 |
+| [async-v1-01-branch](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-branch) | [async-v1-01-07](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-07) | Benedikt Volkel | async-2023-pbpb-apass4<br>async-2024-pp-apass1<br>async-2022-pp-apass7<br>async-2024-pp-cpass0 | 1718975658 |
+| [async-v1-01-branch](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-branch) | [async-v1-01-08](https://github.com/AliceO2Group/O2Physics/tree/async-v1-01-08) | Benedikt Volkel | async-2023-pbpb-apass4<br>async-2024-pp-apass1<br>async-2022-pp-apass7<br>async-2024-pp-cpass0 | 1718990820 |
