@@ -1,5 +1,19 @@
 # Operator documentation
 
+## If something does not work and some important things
+
+Assume there is for whatever reasons a problem with this tool and you have to cherry-pick manually, please always use
+
+```bash
+git cherry-pick -x <commit>
+```
+
+The `-x` is the super important part that also this tool uses. It adds the original commit hash to the commit message once the original commit has been cherry-picked. In this way, it will always be possible to trace back where cherry-picked commits come from.
+
+In fact, the documentation update explained [here](#push-the-tags) and [here](#update-the-documentation) would still work, except for operator and label connections.
+
+Also, never cherry-pick commits that are not on the default branch of a repository.
+
 ## Update software tags
 
 This is a description of some tooling that supports the following procedure:
@@ -7,16 +21,117 @@ This is a description of some tooling that supports the following procedure:
 1. cherry-pick new software requests,
 1. tag related packages,
 1. create requested tags,
-1. push these tags to the corresponding upstream repo,
-1. update the documentation page
+1. push these tags to the corresponding upstream repos,
+1. update the documentation page.
 
-The [tool](../../../src/utils/o2dpg_async_update.py) is written in python. The following steps should be done one after the other.
+The tool is located at `<top-dir-of-this-repo>/src/utils/o2dpg_async_update.py`. The following steps should be done one after the other.
 
-In the following, we will assume that the script is located in the directory `${ASYNC_BIN}`.
+For this documentation, we will **assume** that the script is located in the directory `${ASYNC_BIN}`. You can of course export
+```bash
+export ASYNC_BIN=<top-dir-of-this-repo>/src/utils
+```
+to be able to exactly follow the examples.
 
-For those, the script knows for instance where to find the upstream repositories.
+**NOTE** that for consistency, tags must start with `async-`. Otherwise, the toll will abort.
+
+## Don't be confused
+
+At the end, you will read about [updating the documentation](#update-the-documentation). Although it will also fetch this repository from remote, **it is not the same copy of the repository you run this code from**.
+So you have to clone it once somewhere simply to run the tool which is described here.
+For everything the tool does there is absolutely no need to fetch anything yourself. In fact, it is highly discouraged to even do that.
+Just let the tool do what it does.
+
+## Run in a dedicated directory
+
+**It is strongly recommended** to run all of the following in a **dedicated working directory** since running it creates additional output files.
+All repos that are cloned and used should be seen as part of the tool's data. Do not do any developments in these local repos since they are manipulated and any local developments that are there otherwise might be lost.
+
+## Directly diving into it
+
+This is more of a quick guide. More info is provided further down.
+
+### Initialise
+
+To be done once
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py init --operator "Firstname Lastname"
+```
+
+If you need to have the latest stage of the repositories already available at this point (e.g. to browse or to check when a PR has multiple commits), they can be cloned/updated wth
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py init --fetch
+```
+
+### Get a template for the config to work with
+
+This can be done for each new cherry-picking session and copies a template `template_cherry_pick.yml` into the current working directory.
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py init --template
+```
+
+Inside the template, there are 2 examples. The first one specifically shows how to tag all packages always with the same tag. This we do specifically for everything that goes on top of the branch `async-v1-01-branch`. Always all packages are tagged.
+
+In other cases, the new tags are usually based on previous tags.
+
+### Fill the template
+
+Each package is identified by its `name` and wants to know where to `start_from` (this could be an existing tag or branch) and which `target_tag` should be applied once everything in the `commits` list has been cherry-picked. In addition, each such config file needs the list of `labels`.
+This means that each such config file corresponds to a new software build.
+
+By the way, don't worry about
+
+* the order of commits when filling the list since they will be ordered in any case,
+* whether you use the long hashes of the short once; they will always be extended to the long hashes to be consistent.
+
+### Run the cherry-picking
+
+Once the config is complete, run
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py cherry-pick <path-to-yaml-config>
+```
+
+In the beginning, it will clone or update the concerned packages. Therefore, since everything is communicated via `ssh`, you might need to enter your password (multiple times, once per package) to unlock your private key.
+
+After that, it will attempt to apply all commits on top of where you chose to `start_from`. If it fails, it will let you know.
+In any case, as the last message, it will let you know where the corresponding log file of this run is located.
+
+### Push the tags
+
+Since during cherry-picking things can always go wrong, pushing the tags is a dedicated step. To push all tags that have just been created, run
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py push <the-same-path-to-yaml-config-that-you-just-used-before>
+```
+
+This will push all tags and as the last step, it will update the online documentation to contain commits that have been cherry-picked, in which tags they were seen for the first time etc. Since also here, all repositories are accessed via `ssh`, a password for your private key might be necessary.
+
+### DONE
+
+That's it.
+
+Now comes some more info.
 
 ## General info
+
+### Help
+
+To get first-level help, run
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py --help
+```
+
+to see all available sub-commands.
+
+Also, for each sub-command, there is a dedicated help message with
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py <sub-command> --help
+```
 
 ### Packages concerned
 
@@ -36,14 +151,9 @@ As you will see below, there are various sub-commands that can be run. The log f
 
 ### To be always up-to-date
 
-Accessing the upstream repos is done via SSH. If your private key is password protected, you might need to enter your password from time to time whenever a repo is cloned or the local ones are updated.
+Accessing the upstream repos is done via `ssh`. If your private key is password protected, you might need to enter your password from time to time whenever a repo is cloned or the local ones are updated.
 Note that it is extremely important that - when running any cherry-picking and tagging - we make sure to really have the absolute latest and greatest state synced with upstream.
 This is why cloning and resetting of local history to the upstream repo is mandatory each time you cherry-pick or something else is updated.
-
-### Run in a dedicated directory
-
-It is strongly recommended to run all of the following in a **dedicated working directory** since running it creates additional output files.
-All repos that are cloned and used should be seen as part of the tool's data. Do not do any developments in these local repos since they are manipulated and any local developments that are there otherwise might be lost.
 
 ## Specifying the operator
 
@@ -59,52 +169,10 @@ ${ASYNC_BIN}/o2dpg_async_update.py <command> --operator "Firstname Lastname" [<o
 
 ## Cherry-pick and tag
 
-To run this, a `YAML` configuration like the following must be prepared per label (or a group of labels since sometimes, a tag is associated to multiple labels at the same time):
+### You cannot cherry-pick everything
 
-```yaml
-labels:
-  - <label1> # e.g. async-2022-pp-apass6-2023-PbPb-apass2
-
-packages:
-    - name: first package # e.g. O2DPG
-      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-      target_tag: <target-tag> # e.g. async-20240115.8.trd
-      commits:
-        - <commit1>
-        - <commit2>
-        - ...
-        - <commitN>
-    - name: second package # e.g. O2
-      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-      target_tag: <target-tag> # e.g. async-20240115.8.trd
-      commits:
-        - <commit1>
-        - <commit2>
-        - ...
-        - <commitN>
-    - name: third package # e.g. QualityControl
-      start_from: <branch-or-tag> # e.g. async-v1-01-branch or async-20240115.7.trd
-      target_tag: <target-tag> # e.g. async-20240115.8.trd
-      commits:
-        - <commit1>
-        - <commit2>
-        - ...
-        - <commitN>
-```
-
-Another template for immediate use can be found [here](../../../src/utils/template_cherry_pick.py)
-
-In this case we are hence interested in
-
-1. cherry-picking **per package** a list of commits,
-1. subsequently, we wish to add the corresponding `<target-tag>` to each package.
-
-This is all done by issuing the following command
-```bash
-${ASYNC_BIN}/o2dpg_async_update.py tag <input_config>
-```
-
-If this goes wrong at any point, everything will be reset and one can start over after fixing potential merge conflict or similar.
+The commits that are chosen to cherry-pick have to live in the history of the default branch. If they don't, the tool will abort.
+This is done for consistency reasons and to always keep the connection to the default branch of each package.
 
 ### Force retagging
 
@@ -114,28 +182,52 @@ ${ASYNC_BIN}/o2dpg_async_update.py tag <input_config> --retag <pkg1> <pkg2>
 ```
 and mention there all the package you would like to retag after changing the list of commits in the config.
 
-## Push tagged packages
+**This is not recommended!** The better way would be to always create a new tag. Especially if the tag was already pushed, there is nothing you can do about it as far as this tool is concerned.
 
-Once the previous step has been run successfully on the configuration `<input_config>`, run
-```bash
-${ASYNC_BIN}/o2dpg_async_update.py push <input_config>
-```
-to push all packages' tags to their remote repository.
 
 ## Update the documentation
 
-Now comes the step that is crucial for our bookkeeping. This should be run once after all packages for all labels have been cherry-picked and pushed.
-Run
+There are 3 different types of pages that will be created or modified during this step:
+
+1. **per package** a list of commits that have been cherry-picked associated to tags, operators, labels and timestamps,
+1. **per package** a history of tags and what they are based on,
+1. a list of labels that is mapped to the **latest tags** of the packages associated with each label.
+
+A documentation updated happens whenever the `push` command is executed. So there should be no need to manually do that.
+
+**Although it is not recommended** to do the following nor should it be necessary, two other ways to update the documentation are available.
+
+### Via a list of configuration files
+
+By providing a list of `YAML` configuration files, one can run
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py update-doc --from-configs <config1> <config2> ...
+```
+
+This will only work if everything in the configs has been pushed before. It will not work by simply creating such a config and then run the above.
+This is somewhat safe to do because it can recognise the connection between tags, commits, labels and operators.
+
+### Recollect the cherry-picked commits from scratch
+
+**This should not be necessary** but it is possible to collect all cherry-picked commits again. Everything that was possible to connect to operators, labels etc. will again be associated with those.
+This is possible as long as the file in `data/async_software_logging/tagging_history.yml` is intact. If that is messed up or does not exist, the connection between commits, operators etc. will be lost.
+The file `data/async_software_logging/commits.yml` is really only a cache file to speed up the creation of the documentation. And this is the file that would be written again from scratch when the following is run:
+
+```bash
+${ASYNC_BIN}/o2dpg_async_update.py update-doc --recreate-commits
+```
+
+### Just update everything and you don't care
+
+First a **disclaimer**: Please be careful here!
+
+It is in fact possible to update the entire documentation for all of the packages. However, in that case, no further operator or label information will be added and only the operator and label information that is currently available can be used. For new tags it might not be possible to derive such information if they haven't been added via this tool.
+
+Doing this simply browses through the repositories tags and collects all commits that belong/were introduced with a certain tag. If operator/label information is available, great. Otherwise commits will be added with `UNKNOWN LABEL` and `UNKNOWN OPERATOR` annotations.
+
+If you are still convinced, run
+
 ```bash
 ${ASYNC_BIN}/o2dpg_async_update.py update-doc
 ```
-to update the documentation.
-
-This will
-
-1. Clone or fetch the documentation repository if it is not yet there,
-1. reset the local default branch to the upstream history,
-1. update a summary YAML (internal use) with everything that has been done in the previous steps,
-1. compile a markdown with everything that has ever been cherry-picked; each commit will be mapped to the tags it was first seen in and associated labels will also be added for completeness.
-
-**NOTE** that it will recognise the packages that have been pushed as well as those that have not been pushed to their upstream repos. The information of those packages that have not been pushed will not be taken into account when updating the documentation.
