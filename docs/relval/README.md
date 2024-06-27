@@ -226,7 +226,9 @@ A new metric can be added in [ReleaseValidationMetrics.C](https://github.com/Ali
 ### Under the hood
 
 The logic apparent to the user when running the RelVal is the following
+
 ![RelVal general](../files/images/rel_val_overview.png)
+
 `ROOT` files are passed, all computation is done and result plots, JSONs and terminal output is given back to the user.
 
 In reality, this is at least a three-step procedure:
