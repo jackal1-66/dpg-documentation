@@ -668,11 +668,14 @@ O2DPG:
     - async-v1-01-09
     - async-v1-01-09
     - async-v1-01-09
+    - async-20240229.pbpb.2h
   - - async-2023-pbpb-apass4
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+    - async-2023-pbpb-apass3
   - - Benedikt Volkel
+    - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
@@ -680,6 +683,7 @@ O2DPG:
     - '1719423478'
     - '1719423478'
     - '1719423478'
+    - '1719589186'
   3362e43f2fec01d56e59752f25480e43956699c8:
   - '1718898969'
   - 3362e43f2fec01d56e59752f25480e43956699c8
@@ -1032,11 +1036,14 @@ O2DPG:
     - async-v1-01-09
     - async-v1-01-09
     - async-v1-01-09
+    - async-20240229.pbpb.2h
   - - async-2023-pbpb-apass4
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
+    - async-2023-pbpb-apass3
   - - Benedikt Volkel
+    - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
@@ -1044,6 +1051,7 @@ O2DPG:
     - '1719423478'
     - '1719423478'
     - '1719423478'
+    - '1719589186'
   985c3e6586dc785ef1ea5dcf7841ab80d2bd4464:
   - '1715849744'
   - 985c3e6586dc785ef1ea5dcf7841ab80d2bd4464
@@ -1056,6 +1064,14 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  9ef1e817a9449c436e7887cbfab8878c3e22e259:
+  - '1719589186'
+  - 9ef1e817a9449c436e7887cbfab8878c3e22e259
+  - 'PWGHF: Add configuration for sim with pT-hard bins (no gap) (#1553)'
+  - - async-20240229.pbpb.2h
+  - - async-2023-pbpb-apass3
+  - - Benedikt Volkel
+  - - '1719589186'
   9fcc96dabf5a73cf35b2f8b75ad471a70291e519:
   - '1716477123'
   - 9fcc96dabf5a73cf35b2f8b75ad471a70291e519
@@ -1124,6 +1140,14 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  bb6dc1bcb6f96f23410d7009362b220befc5a3a9:
+  - '1719589186'
+  - bb6dc1bcb6f96f23410d7009362b220befc5a3a9
+  - Enhance fraction of D+ to KKpi in D2H MC + new configuration (#1552)
+  - - async-20240229.pbpb.2h
+  - - async-2023-pbpb-apass3
+  - - Benedikt Volkel
+  - - '1719589186'
   c399748f3c79bc39f06d46604101a1e55914d71a:
   - '1715849744'
   - c399748f3c79bc39f06d46604101a1e55914d71a
