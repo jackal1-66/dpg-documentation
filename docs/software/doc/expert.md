@@ -1,5 +1,13 @@
 # Operator documentation
 
+Most of this describes the usage of a tool that is meant to make the cherry-picking of requests easier and more transparent.
+
+The requests have to be labelled by the developers. For the procedure, see [here](README.md/#mark-prs-to-be-cherry-picked-with-labels).
+
+Requests (merged and open) are summarised [here](../requests_automatic/) for discussion and review. These pages are compiled based on the labels that are found in the respective repositories.
+
+Once the commits of requested PRs were cherry-picked and the new tags have been pushed to the repositories, the labels of those PRs have to be removed.
+
 ## If something does not work and some important things
 
 Assume there is for whatever reasons a problem with this tool and you have to cherry-pick manually, please always use
@@ -86,6 +94,8 @@ By the way, don't worry about
 * the order of commits when filling the list since they will be ordered in any case,
 * whether you use the long hashes of the short once; they will always be extended to the long hashes to be consistent.
 
+See [below](#how-to-find-the-correct-commits) on how to find and collect the commits to be cherry-picked.
+
 ### Run the cherry-picking
 
 Once the config is complete, run
@@ -109,11 +119,9 @@ ${ASYNC_BIN}/o2dpg_async_update.py push <the-same-path-to-yaml-config-that-you-j
 
 This will push all tags and as the last step, it will update the online documentation to contain commits that have been cherry-picked, in which tags they were seen for the first time etc. Since also here, all repositories are accessed via `ssh`, a password for your private key might be necessary.
 
-### DONE
+### DONE - Remove the labels
 
-That's it.
-
-Now comes some more info.
+Now, the labels on the PRs, where the cherry-picked commits where introduced, must be removed.
 
 ## General info
 
@@ -169,6 +177,15 @@ ${ASYNC_BIN}/o2dpg_async_update.py <command> --operator "Firstname Lastname" [<o
 
 ## Cherry-pick and tag
 
+### How to find the correct commits
+
+The [request page](../requests_automatic/dpg_pr_report_MERGED.md) lists the hashes of the merged PRs as well as the number of original commits that were associated with that PR. If that last number is `1`, the merge-commit hash can be taken as-is and added to the list in the `YAML` configs. However, if there are more commits, you need to be more careful and might need to take a look into the actual history of the default branch.
+
+* If the commits were squashed into one merge commit, the hash can again be taken as-is.
+* If the commits were simply rebased but not squashed, you need to find all these commits now on the default branch. **NOTE** that they will have different commit hashes than the original commits! One thing you can do is `git log <merge-commit>` to see the history starting at the merge commit. Following that, there will be the other `n-1` commits that need to be cherry-picked.
+
+If the latter is necessary and you need to browse through some of the repositories before you can run the cherry-picking, to simply get the repositories concerned and to be able to browse them beforehand; see also [above](#initialise).
+
 ### You cannot cherry-pick everything
 
 The commits that are chosen to cherry-pick have to live in the history of the default branch. If they don't, the tool will abort.
@@ -183,7 +200,6 @@ ${ASYNC_BIN}/o2dpg_async_update.py tag <input_config> --retag <pkg1> <pkg2>
 and mention there all the package you would like to retag after changing the list of commits in the config.
 
 **This is not recommended!** The better way would be to always create a new tag. Especially if the tag was already pushed, there is nothing you can do about it as far as this tool is concerned.
-
 
 ## Update the documentation
 
@@ -231,3 +247,7 @@ If you are still convinced, run
 ```bash
 ${ASYNC_BIN}/o2dpg_async_update.py update-doc
 ```
+
+## Modify or add packages
+
+As of now, only [certain list of packages](#packages-concerned) is handled by this tool. To modify them or to add other packages, go to the [tool's source file](https://github.com/AliceO2Group/dpg-documentation/blob/main/src/utils/o2dpg_async_update.py) and adjust it at the top where the packages are defined.
