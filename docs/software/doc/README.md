@@ -46,7 +46,7 @@ Labels can be added anytime but only PRs that have been **merged** into the defa
 ```
 
 A special comment in the PR thread is used to trigger the addition of labels.
-As of now, whenever a PR is (re)opened (so far functional in O2 and O2DPG), there will be an automatic message at as the first comment to that PR that instructs users:
+As of now, whenever a PR is (re)opened (so far functional in O2 and O2DPG), there will be an automatic message at as the first comment to that PR that instructs users (the list of labels might be different):
 
 ```instruction
 **REQUEST FOR PRODUCTION RELEASES:**
@@ -63,12 +63,7 @@ async-2023-pp-apass4
 async-2022-pp-apass6-2023-PbPb-apass2
 ```
 
-Each label corresponds to a page where the **approved** requests are listed. The mapping of labels and pages is the following:
-
-* [async-2022-pp-apass4](../requests/2022pp_apass4.md),
-* [async-2023-pbpb-apass3](../requests/2023pbpb_apass3.md),
-* [async-2023-pp-apass4](../requests/2023pp_apass4.md),
-* [async-2022-pp-apass6-2023-PbPb-apass2](../requests/2022pp_apass6.md).
+Each label corresponds to a page where the **approved** requests are listed. The mapping of labels can be found at [here](../history/datasamples.md)
 
 ## Reviewing and accepting PRs (timeline)
 
@@ -80,7 +75,7 @@ PRs that were not accepted during the meeting will not be added to the release b
 
 1. Wednesdays at 15:30 during the [WP12/13 meeting](https://indico.cern.ch/category/4868/): Approval of requested PRs is discussed based on what is listed [here](../requests_automatic/).
 1. All approved PRs will try to be ported to the corresponding tags. If they do not apply cleanly, they cannot be taken (see more on that below).
-1. Before the weekend: The new tags for simulation/reconstruction will be prepared. All ported PRs will be marked with another label that indicates `accepted`.
+1. Before the weekend: The new tags for simulation/reconstruction will be prepared. All ported PRs will have their corresponding request labels removed.
 1. Tuesdays at 12:00: The [list of requests](../requests_automatic/) is updated and the link will be sent around with a meeting reminder. The list will contain also still open PRs that contain labels so that people can work on merging them.
 1. Wednesdays at 12:00: A final update is applied to the [list of requests](../requests_automatic/).
 1. Starting over...
@@ -89,19 +84,16 @@ PRs that were not accepted during the meeting will not be added to the release b
 
 In this case, the requestors are asked to find all other PRs/commits that would be required to be ported such that their original PR commits can be applied cleanly. These PRs would need to be marked with the corresponding labels. In addition, the responsible people are asked to also get in touch with DPG via email in addition.
 
-### If requested PRs were merged more than 3 months ago
+### If requested PRs do not appear on the pages
 
-If requested PRs are somewhat old and lie further in the past, in addition to adding labels responsible people must get in touch with the DPG via email in addition.
+If requested PRs do not appear on the [request pages](../requests_automatic/), please get in touch with the DPG convenors.
 
-A list of collected PRs for upcoming software releases shall be presented during the weekly WP12/13 meeting, Wednesdays at 15:00 CERN time. That requires requestors to be present in the meeting in case there are questions or doubts concerning their PRs.
+## Find information on accepted and applied requests
 
-### Collect the PRs/commits for a tag
+There is a [collection of sub-pages](../accepted/) that list
 
-Here, let's take the O2DPG repository as an example.
-
-One can go to the [closed PRs](https://github.com/AliceO2Group/O2DPG/pulls?q=is%3Apr+is%3Aclosed+label%3Aasync-2022-pp-apass4) for the `async-2022-pp-apass4` label to see all closed PRs containing that label.
-At any time, one can filter by any other label.
-In addition, to filter by "when a PR was merged", [this URL](https://github.com/AliceO2Group/O2DPG/pulls?q=is%3Apr+is%3Aclosed+merged%3A2023-03-19..2024-03-19+label%3Aasync-2022-pp-apass4) can be used as a starting point.
-It filters the PRs taking into account given labels and the time interval in which PRs were merged.
+* commits that have been cherry-picked per package,
+* the latest tags per label,
+* the history ("from -> to") of created tags.
 
 {% include list.liquid all=true %}
