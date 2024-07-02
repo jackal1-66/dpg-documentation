@@ -96,18 +96,20 @@ By the way, don't worry about
 
 See [below](#how-to-find-the-correct-commits) on how to find and collect the commits to be cherry-picked.
 
-### Run the cherry-picking
+### Run the cherry-picking and tagging
 
 Once the config is complete, run
 
 ```bash
-${ASYNC_BIN}/o2dpg_async_update.py cherry-pick <path-to-yaml-config>
+${ASYNC_BIN}/o2dpg_async_update.py tag <path-to-yaml-config>
 ```
 
 In the beginning, it will clone or update the concerned packages. Therefore, since everything is communicated via `ssh`, you might need to enter your password (multiple times, once per package) to unlock your private key.
 
 After that, it will attempt to apply all commits on top of where you chose to `start_from`. If it fails, it will let you know.
 In any case, as the last message, it will let you know where the corresponding log file of this run is located.
+
+In case of success, all commits will be cherry-picked and the `target_tag` will be applied.
 
 ### Push the tags
 
