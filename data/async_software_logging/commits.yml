@@ -255,6 +255,26 @@ AliceO2:
   - - NO LABEL
   - - UNKNOWN OPERATOR
   - - '1715850198'
+  79ca607b4caf8a8f56ff18f123ae447266c62e39:
+  - '1719914071'
+  - 79ca607b4caf8a8f56ff18f123ae447266c62e39
+  - Decrease verbosity of CTF encoding/decoding
+  - - async-v1-01-10
+    - async-v1-01-10
+    - async-v1-01-10
+    - async-v1-01-10
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1719914071'
+    - '1719914071'
+    - '1719914071'
+    - '1719914071'
   81d66fb0518097a706c233c88cd0e989b205f4ce:
   - '1715850198'
   - 81d66fb0518097a706c233c88cd0e989b205f4ce
@@ -359,6 +379,26 @@ AliceO2:
     - '1718975658'
     - '1718975658'
     - '1718975658'
+  bb1d6dac65cb6e63e69a3279b370c9ef3bc2f056:
+  - '1719914071'
+  - bb1d6dac65cb6e63e69a3279b370c9ef3bc2f056
+  - '[CTF] Fix 0 Bit Packing'
+  - - async-v1-01-10
+    - async-v1-01-10
+    - async-v1-01-10
+    - async-v1-01-10
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1719914071'
+    - '1719914071'
+    - '1719914071'
+    - '1719914071'
   bb45d28dac77e8ab17fbf4b07e22fae70aab76ab:
   - '1716489639'
   - bb45d28dac77e8ab17fbf4b07e22fae70aab76ab
