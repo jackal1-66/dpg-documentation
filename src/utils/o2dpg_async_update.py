@@ -107,7 +107,7 @@ def get_logger():
     return logging.getLogger('async_sw_logger')
 
 
-def run_command(cmd, cwd=None, stdout_list=None):
+def run_command(cmd, cwd=None, stdout_list=None, suppress_log=False):
     """
     Run a command
 
@@ -122,11 +122,13 @@ def run_command(cmd, cwd=None, stdout_list=None):
 
     if logger:
         logger.debug(cmd)
+        if suppress_log:
+            logger.debug('...output suppressed...')
 
     if logger or stdout_list:
         for line in p.stdout:
             line = line.strip()
-            if logger:
+            if logger and not suppress_log:
                 logger.debug(line)
             if stdout_list is not None:
                 stdout_list.append(line)
@@ -357,7 +359,7 @@ def get_full_history(package, branch=None):
         branch = package['default_branch']
 
     out = []
-    run_command(f'git rev-list {branch}', cwd=package['dir'], stdout_list=out)
+    run_command(f'git rev-list {branch}', cwd=package['dir'], stdout_list=out, suppress_log=True)
 
     return list(reversed(out))
 
@@ -874,7 +876,7 @@ def update_doc_impl(package, recreate_commits=False):
 
     # collect all async-* tags in this package
     all_tags = []
-    run_command('git for-each-ref --sort=creatordate --format \'%(refname) %(creatordate:unix)\' refs/tags', cwd=package['dir'], stdout_list=all_tags)
+    run_command('git for-each-ref --sort=creatordate --format \'%(refname) %(creatordate:unix)\' refs/tags', cwd=package['dir'], stdout_list=all_tags, suppress_log=True)
     all_tags = [at for at in all_tags if 'refs/tags/async-' in at]
 
     # run through all of these tags
