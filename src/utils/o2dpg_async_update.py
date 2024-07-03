@@ -252,7 +252,7 @@ def check_tag_config_by_user(config, labels):
     """
     logger = get_logger()
     logger.info('Cross-checking user config')
-    logger.info('Are you sure you want to tag for the following labels [y/N]?\n%s', '\n'.join(labels))
+    logger.info('Are you sure you want to tag for the following labels [y/N]?\nYOU MIGHT WANT TO ADD MULTIPLE LABELS.\n%s', '\n'.join(labels))
     yes_no = input()
 
     if not yes_no or yes_no.lower() != 'y':
@@ -260,7 +260,7 @@ def check_tag_config_by_user(config, labels):
         return False
 
     for package in get_packages(config):
-        logger.info('Do you want to tag the following package [y/N]?\nName: %s\nStart from: %s\nTarget tag: %s', package['name'], package['start_from'], package['target_tag'])
+        logger.info('Do you want to tag the following package [y/N]?\nName: %s\nStart from: %s\nTarget tag: %s\nMAKE SURE TO START FROM A BRANCH IF ONE IS AVAILABLE FOR YOUR LABELS.', package['name'], package['start_from'], package['target_tag'])
         yes_no = input()
         if not yes_no or yes_no.lower() != 'y':
             logger.info('It seems you are not satisfied with your tag settings.')
@@ -881,7 +881,7 @@ def update_doc_impl(package, recreate_commits=False):
 
     # run through all of these tags
     for tag_date in all_tags:
-        # from the aobve git query, we have the tag and the timestamp. This timestamp is in fact the commit timestamp and not the tag's timestamp
+        # from the above git query, we have the tag and the timestamp. This timestamp is in fact the commit timestamp and not the tag's timestamp
         # since in most cases we do not have annotated tags which have no time attached
         tag_date = tag_date.split()
         # split into the tag name and the timestamp
