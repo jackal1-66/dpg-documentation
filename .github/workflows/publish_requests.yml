@@ -10,6 +10,10 @@ jobs:
     if: github.repository == 'AliceO2Group/dpg-documentation'
     steps:
 
+      - name: Set CERN timezone
+        run: |
+          sudo timedatectl set-timezone "Europe/Zurich"
+
       - name: Checkout documentation
         uses: actions/checkout@v4
         with:
