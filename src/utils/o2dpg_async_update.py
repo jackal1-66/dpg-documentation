@@ -334,7 +334,7 @@ def update_branch_from_remote(package, branch=None):
     branch = branch or package['default_branch']
     logger.info('Update branch %s from remote.', branch)
     cwd = package['dir']
-    if run_command(f'git checkout {branch}', cwd=cwd) != 0 and run_command(f'git reset --hard origin/{branch}', cwd=cwd) != 0:
+    if run_command(f'git checkout {branch}', cwd=cwd) != 0 or run_command(f'git reset --hard origin/{branch}', cwd=cwd) != 0:
         logger.error('Cannot update default branch %s of package %s', branch, package['name'])
         return False
     return True
