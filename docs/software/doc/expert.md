@@ -157,7 +157,15 @@ It does currently not support any other packages. However, an extension in that 
 ### Log files
 
 Log files are always created. They contain the same information that is written in the terminal but also more, for instance all output when a git command is issued.
-As you will see below, there are various sub-commands that can be run. The log file name will be printed at the end of the execution and has the form of `o2dpg_cherry_picks_logs/<called-function>_<timestamp>.log`.
+The output of git commands is logged as `DEBUG`.
+There are however two cases in which the git output is suppressed in the logs
+
+1. when collecting all tags per package (`git for-each-ref ...`),
+1. when getting all commit hashes from the default branch (`git rev-list`).
+
+These outputs are very long and are only necessary for internal usage.
+
+For each sub-command, the log file name will be printed at the end of the execution and has the form of `o2dpg_cherry_picks_logs/<called-function>_<timestamp>.log`.
 
 ### To be always up-to-date
 
