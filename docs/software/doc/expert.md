@@ -54,6 +54,19 @@ Just let the tool do what it does.
 **It is strongly recommended** to run all of the following in a **dedicated working directory** since running it creates additional output files.
 All repos that are cloned and used should be seen as part of the tool's data. Do not do any developments in these local repos since they are manipulated and any local developments that are there otherwise might be lost.
 
+## Cherry-pick to branch
+
+There are the labels
+
+* `async-2023-pbpb-apass4`,
+* `async-2024-pp-apass1`,
+* `async-2022-pp-apass7`,
+* `async-2024-pp-cpass0`
+
+for which all cherry-picks go to the same **branch**, namely `async-v1-01-branch`. Please see [below](#get-a-template-for-the-config-to-work-with) to acquire a template configuration that satisfies the basic configurations for specifically this case.
+
+**Never cherry-pick to the previous tag but always to the branch!**
+
 ## Directly diving into it
 
 This is more of a quick guide. More info is provided further down.
@@ -80,14 +93,18 @@ This can be done for each new cherry-picking session and copies a template `temp
 ${ASYNC_BIN}/o2dpg_async_update.py init --template
 ```
 
-Inside the template, there are 2 examples. The first one specifically shows how to tag all packages always with the same tag. This we do specifically for everything that goes on top of the branch `async-v1-01-branch`. Always all packages are tagged.
+Inside the template, there are **2 examples**. The first one specifically shows how to tag all packages always with the same tag. This we do specifically for everything that goes on top of the branch `async-v1-01-branch`. Always all packages are tagged.
 
 In other cases, the new tags are usually based on previous tags.
+
+Depending for which labels you want to cherry-pick, remove the other block and only complete the block needed. Then, it is recommended to rename the filename to reflect what that configuration is for. Also, this way the `init --template` command can be run again without overwriting the previous template configuration.
 
 ### Fill the template
 
 Each package is identified by its `name` and wants to know where to `start_from` (this could be an existing tag or branch) and which `target_tag` should be applied once everything in the `commits` list has been cherry-picked. In addition, each such config file needs the list of `labels`.
 This means that each such config file corresponds to a new software build.
+
+**Make sure that the indentations in the `YAML` configuration are consistent!**
 
 By the way, don't worry about
 
