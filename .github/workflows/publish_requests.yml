@@ -14,6 +14,11 @@ jobs:
         run: |
           sudo timedatectl set-timezone "Europe/Zurich"
 
+      - name: Setup python
+        run: |
+          # to convert UTC times to Europe/Zurich (CERN time)
+          pip install python-dateutil
+
       - name: Checkout documentation
         uses: actions/checkout@v4
         with:
@@ -181,7 +186,6 @@ jobs:
           cat <<\EOF > prs.json
           ${{ steps.get_prs.outputs.data }}
           EOF
-          cat prs.json
 
       - name: Make the request pages
         shell: python
@@ -189,6 +193,7 @@ jobs:
           import json
           from time import time
           from datetime import datetime
+          from dateutil import tz
 
           def sort_prs(prs):
               # Need to sort by
@@ -242,6 +247,10 @@ jobs:
 
           def make_report(flag, prs_per_label, outfile):
 
+              # prepare to convert time to CERN/Geneva time correctly
+              from_zone = tz.tzutc()
+              to_zone = tz.gettz('Europe/Zurich')
+
               with open(outfile, 'w') as f:
 
                   f.write(f'# List PRs in state {flag} (from oldest to recent per package), last update: {datetime.fromtimestamp(int(time())).strftime("%Y-%m-%d %H:%M")} \n')
@@ -261,12 +270,15 @@ jobs:
 
                       for repo_name, prs in prs_per_repo.items():
                           sort_by = [pr[sort_by_field] for pr in prs]
-                          for s, pr in sorted(zip(sort_by, prs)):
+                          for time_iso_utc, pr in sorted(zip(sort_by, prs)):
+                              time_geneva = datetime.fromisoformat(time_iso_utc)
+                              time_geneva.replace(tzinfo=from_zone)
+                              time_geneva = time_geneva.astimezone(to_zone).strftime('%Y-%m-%d %H:%M:%S')
                               # we fetch at most 10 commits, make that clear
                               n_commits = len(pr["commits"]["nodes"])
                               if n_commits >= 10:
                                 n_commits = f'at least {n_commits}'
-                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {s} | {n_commits} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
+                              f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {time_geneva} | {n_commits} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
 
           def make_markdowns(prs_json):
