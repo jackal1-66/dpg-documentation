@@ -193,7 +193,7 @@ jobs:
           import json
           from time import time
           from datetime import datetime
-          from dateutil import tz
+          from dateutil import tz, parser
 
           def sort_prs(prs):
               # Need to sort by
@@ -248,7 +248,6 @@ jobs:
           def make_report(flag, prs_per_label, outfile):
 
               # prepare to convert time to CERN/Geneva time correctly
-              from_zone = tz.tzutc()
               to_zone = tz.gettz('Europe/Zurich')
 
               with open(outfile, 'w') as f:
@@ -271,8 +270,7 @@ jobs:
                       for repo_name, prs in prs_per_repo.items():
                           sort_by = [pr[sort_by_field] for pr in prs]
                           for time_iso_utc, pr in sorted(zip(sort_by, prs)):
-                              time_geneva = datetime.fromisoformat(time_iso_utc)
-                              time_geneva.replace(tzinfo=from_zone)
+                              time_geneva = parser.parse(time_iso_utc)
                               time_geneva = time_geneva.astimezone(to_zone).strftime('%Y-%m-%d %H:%M:%S')
                               # we fetch at most 10 commits, make that clear
                               n_commits = len(pr["commits"]["nodes"])
