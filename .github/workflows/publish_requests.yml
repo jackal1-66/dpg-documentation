@@ -70,7 +70,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits(first: 10) {
+                    commits(first: 2) {
                       nodes {
                         commit {
                           oid
@@ -103,7 +103,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits(first: 10) {
+                    commits(first: 2) {
                       nodes {
                         commit {
                           oid
@@ -136,7 +136,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits(first: 10) {
+                    commits(first: 2) {
                       nodes {
                         commit {
                           oid
@@ -169,7 +169,7 @@ jobs:
                     mergeCommit {
                       oid
                     }
-                    commits(first: 10) {
+                    commits(first: 2) {
                       nodes {
                         commit {
                           oid
@@ -274,7 +274,7 @@ jobs:
                               time_geneva = time_geneva.astimezone(to_zone).strftime('%Y-%m-%d %H:%M:%S')
                               # we fetch at most 10 commits, make that clear
                               n_commits = len(pr["commits"]["nodes"])
-                              if n_commits >= 10:
+                              if n_commits >= 2:
                                 n_commits = f'at least {n_commits}'
                               f.write(f'| {pr["author"]["login"]} | {repo_name} | [PR]({pr["url"]}) | {pr["title"]} | {time_geneva} | {n_commits} | {pr["mergeCommit"]["oid"] if pr["mergeCommit"] else "-"} |\n')
 
