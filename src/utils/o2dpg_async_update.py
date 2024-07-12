@@ -387,6 +387,8 @@ def sort_commits(package, according_to_list=None, commits=None, ignore_different
 
     out = [o for o in out if o in list(set(commits))]
 
+    print(out)
+
     if len(out) != len(commits) and not ignore_different_length:
         logger.error('During sorting, some of the original commits seem not to be recognised.')
         return None
@@ -1134,7 +1136,7 @@ def run_cherry_pick_tag(args):
         else:
             logger.info('==> Config is sane!')
 
-        if not fetch(package) or not prepare_for_cherry_pick(package):
+        if not fetch(package) or not update_branch_from_remote(package) or not prepare_for_cherry_pick(package):
             return 1
         else:
             logger.info('==> Checked out!')
