@@ -183,6 +183,26 @@ AliceO2:
     - '1718898969'
     - '1718898969'
     - '1718898969'
+  40b413211370d884043268914836481fa1151c84:
+  - '1720782516'
+  - 40b413211370d884043268914836481fa1151c84
+  - '[Strangeness tracking] Enable 3body strangeness tracking by default (#13182)'
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782516'
+    - '1720782516'
+    - '1720782516'
+    - '1720782516'
   433dad6c3c2cfd9fdcbbf9401c690d7e5d79bfe6:
   - '1715850198'
   - 433dad6c3c2cfd9fdcbbf9401c690d7e5d79bfe6
@@ -327,6 +347,26 @@ AliceO2:
   - - NO LABEL
   - - UNKNOWN OPERATOR
   - - '1715850198'
+  a3c394df0ad99c698503629763bcd70c2416d292:
+  - '1720782516'
+  - a3c394df0ad99c698503629763bcd70c2416d292
+  - Fix return value for rANS packing bug recovery
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782516'
+    - '1720782516'
+    - '1720782516'
+    - '1720782516'
   a70c90fcfec848c7e8789350a5f313167f38f37d:
   - '1715850198'
   - a70c90fcfec848c7e8789350a5f313167f38f37d
@@ -431,6 +471,26 @@ AliceO2:
   - - NO LABEL
   - - UNKNOWN OPERATOR
   - - '1715850198'
+  cf732d6c73c7ae0669045a469c36f77788d6e93f:
+  - '1720782516'
+  - cf732d6c73c7ae0669045a469c36f77788d6e93f
+  - Fixes of bugs in class mask calculation
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782516'
+    - '1720782516'
+    - '1720782516'
+    - '1720782516'
   d4172698cb6c3bc1fc065495f31a160e5809303f:
   - '1715850198'
   - d4172698cb6c3bc1fc065495f31a160e5809303f
@@ -463,6 +523,46 @@ AliceO2:
     - '1718975658'
     - '1718975658'
     - '1718975658'
+  f6ee1807b16e0bf253c687da11d9d71c31788354:
+  - '1720782516'
+  - f6ee1807b16e0bf253c687da11d9d71c31788354
+  - 'AOD: Add thinner option to producer and seedable'
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782516'
+    - '1720782516'
+    - '1720782516'
+    - '1720782516'
+  fba0d4fca744c4935c7257f1d794dc00561f1a6a:
+  - '1720782516'
+  - fba0d4fca744c4935c7257f1d794dc00561f1a6a
+  - 'TPC: adding cluster occupancy to timeseries (#13277)'
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782516'
+    - '1720782516'
+    - '1720782516'
+    - '1720782516'
   fe41d60879d1f212f50a6d314efe6a40b7064f06:
   - '1715850198'
   - fe41d60879d1f212f50a6d314efe6a40b7064f06
