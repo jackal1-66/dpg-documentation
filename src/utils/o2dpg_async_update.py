@@ -519,7 +519,7 @@ def git_cherry_pick(package):
         print("SUCCESS ", commit)
         commits_success.append(commit)
 
-    logger.info('Cherry-picking\n  SUCCESS: %d\n  SKIPPED: %d\n  FAILED: %d', len(commits_success), len(commits_skipped), len(commits_failed))
+    logger.info('Cherry-picking\n  SUCCESS: %d (%s)\n  SKIPPED: %d (%s)\n  FAILED: %d (%s)', len(commits_success), ' '.join(commits_success), len(commits_skipped), ' '.join(commits_skipped), len(commits_failed), ' '.join(commits_failed))
 
     # set the status
     package['status_cherry_pick'] = not commits_failed
@@ -548,7 +548,7 @@ def git_tag(package, retag=False, reset=True):
 
     cwd = package['dir']
 
-    if run_command(f'git rev-parse --verify {tag}', cwd=cwd) == 0:
+    if git_verify(package, tag):
         if retag and run_command(f'git tag -d {tag}', cwd=cwd) != 0:
             logger.error('Was asked to re-tag package %s with %s, but failed to remove existing tag.', package_name, tag)
             return False
@@ -601,7 +601,7 @@ def closure(package):
 
     logger.info('Verify %s.', package_name)
 
-    if run_command(f'git rev-parse --verify {tag}', cwd=cwd) != 0:
+    if not git_verify(package, tag):
         logger.error('Package %s does not contain tag %s which was requested', package_name, tag)
         return False
 
@@ -718,6 +718,7 @@ def push_tagged(package):
             for line in out:
                 print(line)
             return False
+        logger.info('Pushed %s of package %s', to_push, package_name)
 
         for line in out:
             if 'Everything up-to-date' in line:
@@ -1142,6 +1143,7 @@ def run_cherry_pick_tag(args):
             logger.info('==> Checked out!')
 
         # warn if this is tagged already with the target tag
+        logger.info('Checking if tag %s exists already', package['target_tag'])
         tagged = git_verify(package)
         if tagged and package['name'] not in packages_to_retag and 'all' not in packages_to_retag:
             # if we found this to be done already, take it
