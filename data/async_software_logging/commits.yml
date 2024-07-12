@@ -648,6 +648,26 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  1af58ff3f15f1b000e101af40403a99494632562:
+  - '1720782526'
+  - 1af58ff3f15f1b000e101af40403a99494632562
+  - "ZDC: Add configuration file PbPb, modify configuration file pp, add s\u2026 (#1659)"
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782526'
+    - '1720782526'
+    - '1720782526'
+    - '1720782526'
   1df34c066f1be7a182724c696ec55437d81fa6b9:
   - '1715849744'
   - 1df34c066f1be7a182724c696ec55437d81fa6b9
@@ -692,6 +712,26 @@ O2DPG:
     - '1718898969'
     - '1718898969'
     - '1718898969'
+  26e3f65974a1600ad664ebda6f7215692073cfba:
+  - '1720782526'
+  - 26e3f65974a1600ad664ebda6f7215692073cfba
+  - Remove deltaRof=1 in pp
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782526'
+    - '1720782526'
+    - '1720782526'
+    - '1720782526'
   281b243753602da1d3c1cb6f8fc4d563fd250ca6:
   - '1715849744'
   - 281b243753602da1d3c1cb6f8fc4d563fd250ca6
@@ -1008,6 +1048,26 @@ O2DPG:
     - '1717751263'
     - '1717751807'
     - '1719323950'
+  633ed6726bfaa3ef185e69e2325ead380a568c38:
+  - '1720782526'
+  - 633ed6726bfaa3ef185e69e2325ead380a568c38
+  - 'PWGHF: add ini for B-forced MCs for pp collisions (#1693)'
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782526'
+    - '1720782526'
+    - '1720782526'
+    - '1720782526'
   63a84a3f86215264de640069991a5d7c68146973:
   - '1715849744'
   - 63a84a3f86215264de640069991a5d7c68146973
@@ -1084,6 +1144,26 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  706946e78cd3359896402df6a88d1de80001e609:
+  - '1720782526'
+  - 706946e78cd3359896402df6a88d1de80001e609
+  - Add --run to alignment geometry creation
+  - - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+    - async-v1-01-11
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1720782526'
+    - '1720782526'
+    - '1720782526'
+    - '1720782526'
   7188d085958ba23d5a7cb647995a962d6d2d0090:
   - '1715849744'
   - 7188d085958ba23d5a7cb647995a962d6d2d0090
