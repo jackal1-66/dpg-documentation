@@ -884,6 +884,26 @@ O2DPG:
     - '1718898969'
     - '1718898969'
     - '1718898969'
+  3391b109fc271d938f521b6a6a557639bf3581c5:
+  - '1721052942'
+  - 3391b109fc271d938f521b6a6a557639bf3581c5
+  - Adopt settings of pbpb23 apass4 test3 + --thin-tracks in AOD
+  - - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1721052942'
+    - '1721052942'
+    - '1721052942'
+    - '1721052942'
   36522d475666654e39c9b526ac41e3dc01cf5b0d:
   - '1718898969'
   - 36522d475666654e39c9b526ac41e3dc01cf5b0d
@@ -1000,6 +1020,27 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  5e962d70659604c7b518c9745ba5f3b4ef679334:
+  - '1721052942'
+  - 5e962d70659604c7b518c9745ba5f3b4ef679334
+  - "Revert \"ZDC: Add configuration file PbPb, modify configuration file pp, add\
+    \ s\u2026\" (#1702)"
+  - - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1721052942'
+    - '1721052942'
+    - '1721052942'
+    - '1721052942'
   629736159a2ccdb9a7c95b782548d1bf9f133ade:
   - '1715849744'
   - 629736159a2ccdb9a7c95b782548d1bf9f133ade
@@ -1500,6 +1541,26 @@ O2DPG:
     - Chiara Zampolli
   - - '1715849744'
     - '1717751807'
+  ee5483baf466d19d265c585f898026334f492390:
+  - '1721052942'
+  - ee5483baf466d19d265c585f898026334f492390
+  - Set the analysisQC axis range depending on the coll system (#1696)
+  - - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+    - async-v1-01-12
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+    - Chiara Zampolli
+  - - '1721052942'
+    - '1721052942'
+    - '1721052942'
+    - '1721052942'
   ef6431c857d59a030923b13977c20a13a228dd94:
   - '1716489639'
   - ef6431c857d59a030923b13977c20a13a228dd94
