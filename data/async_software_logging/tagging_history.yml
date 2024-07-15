@@ -1660,6 +1660,15 @@ O2Physics:
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
   - Chiara Zampolli
+  async-v1-01-12:
+  - '1721052961'
+  - async-v1-01-branch
+  - async-v1-01-12
+  - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2022-pp-apass7
+    - async-2024-pp-cpass0
+  - Chiara Zampolli
 QualityControl:
   async-20221209.1-alidist-master:
   - '1670419227'
