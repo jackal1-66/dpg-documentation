@@ -527,6 +527,13 @@ AliceO2:
   - async-20240115.7.trd
   - - async-2022-pp-apass6-2023-PbPb-apass2
   - Benedikt Volkel
+  async-20240115.8.trd:
+  - '1721469081'
+  - async-20240115.7.trd
+  - async-20240115.8.trd
+  - - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
+  - Alberto Caliva
   async-20240207.1:
   - '1707318507'
   - UNKNOWN START

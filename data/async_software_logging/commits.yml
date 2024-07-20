@@ -68,9 +68,17 @@ AliceO2:
   - 1ed92ef9692feaddc724184b0c490b6c1b5d6298
   - getRunDuration first tests STF/ETF, then SOX/EOX,SOR/EOR
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   2ca79e08739836675ef4ab76cdc332d3f84c4aa6:
   - '1717667967'
   - 2ca79e08739836675ef4ab76cdc332d3f84c4aa6
@@ -124,9 +132,17 @@ AliceO2:
   - 3301b3fccb29bd1dfc44492fa1f96a412390bd0e
   - Optional detailed report on the BasicCCDBManager cache (#12430)
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   356ba3df62a439c10ab9259e34ecf511e35ad464:
   - '1718898969'
   - 356ba3df62a439c10ab9259e34ecf511e35ad464
@@ -152,17 +168,33 @@ AliceO2:
   - 35d6be7c5025bdcb9eefdbc81dee72bcd79af57d
   - 'CCDBApi: avoid leaking curl handle.'
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   370030351d03068ff0336394443934d13c1ff50a:
   - '1715850198'
   - 370030351d03068ff0336394443934d13c1ff50a
   - 'CcdbApi: Improved semaphore resource handling'
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   3b0a46991f06a8661f5ceab3d28e000b513bccce:
   - '1718898969'
   - 3b0a46991f06a8661f5ceab3d28e000b513bccce
@@ -208,25 +240,49 @@ AliceO2:
   - 433dad6c3c2cfd9fdcbbf9401c690d7e5d79bfe6
   - 'Digitization: Fix timestamps for querying CCDB when using BasicCCDBManager'
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   4a6a75d69d386d1c6e33974df992a73515b4ae72:
   - '1715850198'
   - 4a6a75d69d386d1c6e33974df992a73515b4ae72
   - Use filesystem::weakly_canonical instead of filesystem::canonical
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   54663de160e824b4a17f77a028a73966b4572e63:
   - '1715850198'
   - 54663de160e824b4a17f77a028a73966b4572e63
   - Add guards to DefaultsHelpers header
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   62859c83eb64adc8d3f611ab979eb9ec447096cf:
   - '1718898969'
   - 62859c83eb64adc8d3f611ab979eb9ec447096cf
@@ -272,9 +328,17 @@ AliceO2:
   - 78e868c40c6d870969ec0562d81c1599048addc2
   - 'ParticleDatabase: Update Lambda(1520) info according to the latest Pythia8 (#12896)'
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   79ca607b4caf8a8f56ff18f123ae447266c62e39:
   - '1719914071'
   - 79ca607b4caf8a8f56ff18f123ae447266c62e39
@@ -300,9 +364,17 @@ AliceO2:
   - 81d66fb0518097a706c233c88cd0e989b205f4ce
   - CCDB semaphore improvements
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   877eba6e317acc2675671c22fdd97126494ecd59:
   - '1717667967'
   - 877eba6e317acc2675671c22fdd97126494ecd59
@@ -336,17 +408,33 @@ AliceO2:
   - 89d55ee4e30cab8166579509d7d51d864e4fbdc7
   - Ability to locally cache responses from CCDB header-only requests
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   989671a4c4a1419244c96779edcf971dd7791a5e:
   - '1715850198'
   - 989671a4c4a1419244c96779edcf971dd7791a5e
   - CCDBManager can use new Cache-Valid-Until header (#12805)
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   a3c394df0ad99c698503629763bcd70c2416d292:
   - '1720782516'
   - a3c394df0ad99c698503629763bcd70c2416d292
@@ -372,9 +460,17 @@ AliceO2:
   - a70c90fcfec848c7e8789350a5f313167f38f37d
   - getRunDuration uses SOX/EOX, fallback to SOR/EOR and warn if missing
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   a82ab47069e7b37e67b657f39dd764a26afd8cee:
   - '1717667967'
   - a82ab47069e7b37e67b657f39dd764a26afd8cee
@@ -468,9 +564,17 @@ AliceO2:
   - caeba373dbe0b4281f7b9fcba73176ef82211662
   - restore CCDBManagerInstance::endOfStream to print report.
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   cf732d6c73c7ae0669045a469c36f77788d6e93f:
   - '1720782516'
   - cf732d6c73c7ae0669045a469c36f77788d6e93f
@@ -496,9 +600,17 @@ AliceO2:
   - d4172698cb6c3bc1fc065495f31a160e5809303f
   - Account getRunDuration in the cache report of BasicCCDBManager
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
   e95263359963f96ce97c35f0e9fbc6c8276983a4:
   - '1716489639'
   - e95263359963f96ce97c35f0e9fbc6c8276983a4
@@ -568,9 +680,17 @@ AliceO2:
   - fe41d60879d1f212f50a6d314efe6a40b7064f06
   - Use unsafe isCachedObjectValid with CheckObjValidityEnabled
   - - async-20240115.7.trd
+    - async-20240115.8.trd
+    - async-20240115.8.trd
   - - NO LABEL
+    - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1715850198'
+    - '1721469081'
+    - '1721469081'
 O2DPG:
   00c052b11baf24eeb2d46bbe2d04d8d8462a4ad9:
   - '1715849744'
