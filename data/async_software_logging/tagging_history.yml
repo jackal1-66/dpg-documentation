@@ -1183,6 +1183,13 @@ O2DPG:
   - async-20240115.10.trd
   - - async-2022-pp-apass6-2023-PbPb-apass2
   - Chiara Zampolli
+  async-20240115.11.trd:
+  - '1721469083'
+  - async-20240115.10.trd
+  - async-20240115.11.trd
+  - - async-2022-pp-apass6
+    - async-2023-PbPb-apass2
+  - Alberto Caliva
   async-20240115.2:
   - '1705333640'
   - UNKNOWN START
