@@ -1762,6 +1762,12 @@ QualityControl:
   - async-v1-01-02
   - - NO LABEL
   - UNKNOWN OPERATOR
+  async-v1-01-02a:
+  - '1723135268'
+  - async-v1-01-02
+  - async-v1-01-02a
+  - - async-2022-pp-apass7
+  - Alberto Caliva
   async-v1-01-03:
   - '1715681304'
   - UNKNOWN START
@@ -1846,3 +1852,21 @@ QualityControl:
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
   - Chiara Zampolli
+  async-v1-01-13:
+  - '1716995841'
+  - UNKNOWN REVISION
+  - async-v1-01-13
+  - - NO LABEL
+  - UNKNOWN OPERATOR
+  async-v1-01-14:
+  - '1716995841'
+  - UNKNOWN REVISION
+  - async-v1-01-14
+  - - NO LABEL
+  - UNKNOWN OPERATOR
+  async-v1-01-15:
+  - '1716995841'
+  - UNKNOWN REVISION
+  - async-v1-01-15
+  - - NO LABEL
+  - UNKNOWN OPERATOR
