@@ -534,6 +534,12 @@ AliceO2:
   - - async-2022-pp-apass6
     - async-2023-PbPb-apass2
   - Alberto Caliva
+  async-20240115.9.trd:
+  - '1722592912'
+  - UNKNOWN REVISION
+  - async-20240115.9.trd
+  - - NO LABEL
+  - UNKNOWN OPERATOR
   async-20240207.1:
   - '1707318507'
   - UNKNOWN START
@@ -672,6 +678,12 @@ AliceO2:
   - async-v1-01-02
   - - NO LABEL
   - UNKNOWN OPERATOR
+  async-v1-01-02a:
+  - '1723135263'
+  - async-v1-01-02
+  - async-v1-01-02a
+  - - async-2022-pp-apass7
+  - Alberto Caliva
   async-v1-01-03:
   - '1716489639'
   - UNKNOWN START
@@ -756,6 +768,24 @@ AliceO2:
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
   - Chiara Zampolli
+  async-v1-01-13:
+  - '1722152007'
+  - UNKNOWN REVISION
+  - async-v1-01-13
+  - - NO LABEL
+  - UNKNOWN OPERATOR
+  async-v1-01-14:
+  - '1722269586'
+  - UNKNOWN REVISION
+  - async-v1-01-14
+  - - NO LABEL
+  - UNKNOWN OPERATOR
+  async-v1-01-15:
+  - '1723040299'
+  - UNKNOWN REVISION
+  - async-v1-01-15
+  - - NO LABEL
+  - UNKNOWN OPERATOR
 O2DPG:
   async-2022-apass4-pp-mc.1:
   - '1702312795'
