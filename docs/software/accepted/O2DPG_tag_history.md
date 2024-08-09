@@ -2,6 +2,7 @@
 
 | Started from | Created tag | Operator | Associated labels | Date |
 | --- | --- | --- | --- | --- |
+| [async-20240229.pp.2c](https://github.com/AliceO2Group/O2DPG/tree/async-20240229.pp.2c) | [async-20240229.pp.2d](https://github.com/AliceO2Group/O2DPG/tree/async-20240229.pp.2d) | Chiara Zampolli | async-2023-pp-apass4 | 2024-08-09 07:33 |
 | [async-v1-01-02](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-02) | [async-v1-01-02a](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-02a) | Alberto Caliva | async-2022-pp-apass7 | 2024-08-08 18:41 |
 | [UNKNOWN REVISION](https://github.com/AliceO2Group/O2DPG/tree/UNKNOWN REVISION) | [async-v1-01-15](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-15) | UNKNOWN OPERATOR | NO LABEL | 2024-08-07 16:18 |
 | [UNKNOWN REVISION](https://github.com/AliceO2Group/O2DPG/tree/UNKNOWN REVISION) | [async-v1-01-14](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-14) | UNKNOWN OPERATOR | NO LABEL | 2024-07-26 17:29 |
