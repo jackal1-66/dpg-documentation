@@ -1272,6 +1272,14 @@ O2DPG:
     - '1721052942'
     - '1721052942'
     - '1722007796'
+  34f5498e0b9b9408e532b38d1807488196fddb90:
+  - '1723652112'
+  - 34f5498e0b9b9408e532b38d1807488196fddb90
+  - fixed typo in HF resonance generator test (#1717)
+  - - async-v1-01-02b
+  - - async-2022-pp-apass7
+  - - Alberto Caliva
+  - - '1723652112'
   36522d475666654e39c9b526ac41e3dc01cf5b0d:
   - '1718898969'
   - 36522d475666654e39c9b526ac41e3dc01cf5b0d
@@ -1376,6 +1384,14 @@ O2DPG:
   - - NO LABEL
   - - UNKNOWN OPERATOR
   - - '1723040300'
+  4c65dcd2495f2094d70b0b2048360bb8acf34205:
+  - '1723652112'
+  - 4c65dcd2495f2094d70b0b2048360bb8acf34205
+  - 'PWGJE: Adding option to keep parton level stack in jet MC (#1723)'
+  - - async-v1-01-02b
+  - - async-2022-pp-apass7
+  - - Alberto Caliva
+  - - '1723652112'
   5162e5998d147fbf21ac94857252275e0952f8ba:
   - '1715849744'
   - 5162e5998d147fbf21ac94857252275e0952f8ba

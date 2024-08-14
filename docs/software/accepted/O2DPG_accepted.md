@@ -2,6 +2,8 @@
 
 | Commit subject | Tags first seen / associated labels |
 | --- | --- |
+| [PWGJE: Adding option to keep parton level stack in jet MC (#1723)](https://github.com/AliceO2Group/O2DPG/commit/4c65dcd2495f2094d70b0b2048360bb8acf34205) | [async-v1-01-02b](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-02b) (async-2022-pp-apass7, 2024-08-14 18:15, Alberto Caliva) |
+| [fixed typo in HF resonance generator test (#1717)](https://github.com/AliceO2Group/O2DPG/commit/34f5498e0b9b9408e532b38d1807488196fddb90) | [async-v1-01-02b](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-02b) (async-2022-pp-apass7, 2024-08-14 18:15, Alberto Caliva) |
 | [[Anchor] Add test for anchored MC (#1464)](https://github.com/AliceO2Group/O2DPG/commit/ed7cc8640f26e1098f5ac1e467b57806400ba59c) | [async-20240229.pp.2d](https://github.com/AliceO2Group/O2DPG/tree/async-20240229.pp.2d) (async-2023-pp-apass4, 2024-08-09 07:33, Chiara Zampolli) |
 | [[WF CI] Test also QC and AnalysisQC](https://github.com/AliceO2Group/O2DPG/commit/eab175696e7dde819c8ef783e7c4001debbcc552) | [async-20240229.pp.2d](https://github.com/AliceO2Group/O2DPG/tree/async-20240229.pp.2d) (async-2023-pp-apass4, 2024-08-09 07:33, Chiara Zampolli) |
 | [[Anchor] Add some more help messages (#1511)](https://github.com/AliceO2Group/O2DPG/commit/b9cb67a0845587b3d34bb6d320711dc0478c4022) | [async-20240229.pp.2d](https://github.com/AliceO2Group/O2DPG/tree/async-20240229.pp.2d) (async-2023-pp-apass4, 2024-08-09 07:33, Chiara Zampolli) |
