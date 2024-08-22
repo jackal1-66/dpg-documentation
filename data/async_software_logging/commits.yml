@@ -653,12 +653,24 @@ AliceO2:
   - '[Gen] Abort if sub-generator is not configured correctly'
   - - async-v1-01-15
     - async-v1-01-02a
+    - async-v1-01-02c
+    - async-v1-01-02c
+    - async-v1-01-02c
   - - NO LABEL
     - async-2022-pp-apass7
+    - async-2023-pp-apass4
+    - async-2024-pp-apass1
+    - async-2024-pp-cpass0
   - - UNKNOWN OPERATOR
+    - Alberto Caliva
+    - Alberto Caliva
+    - Alberto Caliva
     - Alberto Caliva
   - - '1723040299'
     - '1723135263'
+    - '1724332826'
+    - '1724332826'
+    - '1724332826'
   caeba373dbe0b4281f7b9fcba73176ef82211662:
   - '1715850198'
   - caeba373dbe0b4281f7b9fcba73176ef82211662
@@ -684,21 +696,25 @@ AliceO2:
     - async-v1-01-11
     - async-v1-01-11
     - async-v1-01-13
+    - async-v1-01-02c
   - - async-2023-pbpb-apass4
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
     - NO LABEL
+    - async-2023-pp-apass4
   - - Chiara Zampolli
     - Chiara Zampolli
     - Chiara Zampolli
     - Chiara Zampolli
     - UNKNOWN OPERATOR
+    - Alberto Caliva
   - - '1720782516'
     - '1720782516'
     - '1720782516'
     - '1720782516'
     - '1722152007'
+    - '1724332826'
   d4172698cb6c3bc1fc065495f31a160e5809303f:
   - '1715850198'
   - d4172698cb6c3bc1fc065495f31a160e5809303f
