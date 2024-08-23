@@ -1758,6 +1758,14 @@ O2DPG:
     - '1717751807'
     - '1721469083'
     - '1721469083'
+  6843fafadc9a5077b07b50cb2debd5de4507b218:
+  - '1724399435'
+  - 6843fafadc9a5077b07b50cb2debd5de4507b218
+  - 'PWGHF: add xic+ in ini file and rename (#1582)'
+  - - async-20240229.pp.2e
+  - - async-2023-pp-apass4
+  - - Alberto Caliva
+  - - '1724399435'
   6b4452c9b7f16c2c62376d23d3a1f258085f8d23:
   - '1716477137'
   - 6b4452c9b7f16c2c62376d23d3a1f258085f8d23
@@ -2024,24 +2032,28 @@ O2DPG:
     - async-v1-01-09
     - async-20240229.pbpb.2h
     - async-v1-01-13
+    - async-20240229.pp.2e
   - - async-2023-pbpb-apass4
     - async-2024-pp-apass1
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
     - async-2023-pbpb-apass3
     - NO LABEL
+    - async-2023-pp-apass4
   - - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
     - Benedikt Volkel
     - UNKNOWN OPERATOR
+    - Alberto Caliva
   - - '1719423478'
     - '1719423478'
     - '1719423478'
     - '1719423478'
     - '1719589186'
     - '1722007796'
+    - '1724399435'
   985c3e6586dc785ef1ea5dcf7841ab80d2bd4464:
   - '1715849744'
   - 985c3e6586dc785ef1ea5dcf7841ab80d2bd4464
@@ -2091,9 +2103,13 @@ O2DPG:
   - 9ef1e817a9449c436e7887cbfab8878c3e22e259
   - 'PWGHF: Add configuration for sim with pT-hard bins (no gap) (#1553)'
   - - async-20240229.pbpb.2h
+    - async-20240229.pp.2e
   - - async-2023-pbpb-apass3
+    - async-2023-pp-apass4
   - - Benedikt Volkel
+    - Alberto Caliva
   - - '1719589186'
+    - '1724399435'
   9fcc96dabf5a73cf35b2f8b75ad471a70291e519:
   - '1716477123'
   - 9fcc96dabf5a73cf35b2f8b75ad471a70291e519
@@ -2276,9 +2292,13 @@ O2DPG:
   - bb6dc1bcb6f96f23410d7009362b220befc5a3a9
   - Enhance fraction of D+ to KKpi in D2H MC + new configuration (#1552)
   - - async-20240229.pbpb.2h
+    - async-20240229.pp.2e
   - - async-2023-pbpb-apass3
+    - async-2023-pp-apass4
   - - Benedikt Volkel
+    - Alberto Caliva
   - - '1719589186'
+    - '1724399435'
   c2b733fb8771acbf2867cb39259e851422fea6f6:
   - '1723040300'
   - c2b733fb8771acbf2867cb39259e851422fea6f6
