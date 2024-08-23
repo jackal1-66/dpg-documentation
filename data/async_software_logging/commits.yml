@@ -2659,6 +2659,14 @@ O2DPG:
     - '1721052942'
     - '1721052942'
     - '1722007796'
+  ef0e84d4d13fcafb86b96895ca370894025619fa:
+  - '1724421618'
+  - ef0e84d4d13fcafb86b96895ca370894025619fa
+  - '[WFRunner] Estimate resources dynamically'
+  - - async-20240229.pp.2f
+  - - async-2023-pp-apass4
+  - - Alberto Caliva
+  - - '1724421618'
   ef6431c857d59a030923b13977c20a13a228dd94:
   - '1716489639'
   - ef6431c857d59a030923b13977c20a13a228dd94
