@@ -1156,6 +1156,14 @@ O2DPG:
     - '1717751807'
     - '1721469083'
     - '1721469083'
+  1701ebeb5ab45778d4a910c4951fed0ba83a0172:
+  - '1724855772'
+  - 1701ebeb5ab45778d4a910c4951fed0ba83a0172
+  - fix full acceptance cut (#1704)
+  - - async-v1-01-02d
+  - - async-2022-pp-apass7
+  - - Alberto Caliva
+  - - '1724855772'
   1af58ff3f15f1b000e101af40403a99494632562:
   - '1720782526'
   - 1af58ff3f15f1b000e101af40403a99494632562
