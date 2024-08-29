@@ -1161,9 +1161,13 @@ O2DPG:
   - 1701ebeb5ab45778d4a910c4951fed0ba83a0172
   - fix full acceptance cut (#1704)
   - - async-v1-01-02d
+    - async-v1-01-17
   - - async-2022-pp-apass7
+    - async-2023-pbpb-apass4
   - - Alberto Caliva
+    - Alberto Caliva
   - - '1724855772'
+    - '1724921825'
   1af58ff3f15f1b000e101af40403a99494632562:
   - '1720782526'
   - 1af58ff3f15f1b000e101af40403a99494632562
@@ -3064,6 +3068,15 @@ O2DPG:
     - '1724332828'
     - '1724332828'
     - '1724674076'
+  fd832bd3c2073561b2e2f6865aac0a0defcef03f:
+  - '1724921825'
+  - fd832bd3c2073561b2e2f6865aac0a0defcef03f
+  - Apply custom askMinTPCRow with IROC11 exception for unprocessed runs in pbpb23
+    and LHC24al
+  - - async-v1-01-17
+  - - async-2023-pbpb-apass4
+  - - Alberto Caliva
+  - - '1724921825'
 O2Physics: {}
 QualityControl:
   0d9ceeebde230024c567e14bf5024a02a03f9b9b:
