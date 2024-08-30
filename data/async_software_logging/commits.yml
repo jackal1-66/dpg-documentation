@@ -3074,9 +3074,17 @@ O2DPG:
   - Apply custom askMinTPCRow with IROC11 exception for unprocessed runs in pbpb23
     and LHC24al
   - - async-v1-01-17
+    - async-v1-01-12a
+    - async-v1-01-12a
   - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2024-pp-cpass0
   - - Alberto Caliva
+    - Chiara Zampolli
+    - Chiara Zampolli
   - - '1724921825'
+    - '1725009220'
+    - '1725009220'
 O2Physics: {}
 QualityControl:
   0d9ceeebde230024c567e14bf5024a02a03f9b9b:
