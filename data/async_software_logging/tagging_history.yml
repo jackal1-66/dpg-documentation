@@ -789,6 +789,13 @@ AliceO2:
     - async-2022-pp-apass7
     - async-2024-pp-cpass0
   - Chiara Zampolli
+  async-v1-01-12a:
+  - '1725009215'
+  - async-v1-01-12
+  - async-v1-01-12a
+  - - async-2024-pp-apass1
+    - async-2024-pp-cpass0
+  - Chiara Zampolli
   async-v1-01-13:
   - '1722152007'
   - UNKNOWN REVISION
