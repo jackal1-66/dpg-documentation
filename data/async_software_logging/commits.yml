@@ -2358,6 +2358,14 @@ O2DPG:
     - '1717751807'
     - '1721469083'
     - '1721469083'
+  99e5525440b9c4782df2519943e891a3ffce6bed:
+  - '1725625044'
+  - 99e5525440b9c4782df2519943e891a3ffce6bed
+  - Adding eta cuts to the trigger (#1700)
+  - - async-v1-01-18
+  - - async-2023-pbpb-apass4
+  - - Chiara Zampolli
+  - - '1725625044'
   9a5a25405614cde2838d50565beaf000b4853c5e:
   - '1723040300'
   - 9a5a25405614cde2838d50565beaf000b4853c5e
@@ -3039,6 +3047,30 @@ O2DPG:
     - '1717667967'
     - '1717667967'
     - '1717667967'
+  f0496b91827ea1c22d156524b8a7f6cb136a21b8:
+  - '1725625044'
+  - f0496b91827ea1c22d156524b8a7f6cb136a21b8
+  - Script to run STARlight anchored productions (#1681)
+  - - async-v1-01-18
+  - - async-2023-pbpb-apass4
+  - - Chiara Zampolli
+  - - '1725625044'
+  f2566668d7d5b965fdc89850718959bff2208a3c:
+  - '1725625044'
+  - f2566668d7d5b965fdc89850718959bff2208a3c
+  - Fix TPC timeseries for MC (#1740)
+  - - async-v1-01-18
+  - - async-2023-pbpb-apass4
+  - - Chiara Zampolli
+  - - '1725625044'
+  f79426f195d72ee2f3fe45227fb7150758f5dbcf:
+  - '1725625044'
+  - f79426f195d72ee2f3fe45227fb7150758f5dbcf
+  - PWGUD Starlight interface (#1663)
+  - - async-v1-01-18
+  - - async-2023-pbpb-apass4
+  - - Chiara Zampolli
+  - - '1725625044'
   f919a5180f3216e88e48d8f91995af5f971df9e5:
   - '1723040300'
   - f919a5180f3216e88e48d8f91995af5f971df9e5
@@ -3068,6 +3100,14 @@ O2DPG:
     - '1724332828'
     - '1724332828'
     - '1724674076'
+  fd76e5f542105e4a961999711d0ce884432aade7:
+  - '1725625044'
+  - fd76e5f542105e4a961999711d0ce884432aade7
+  - Start special treatment of IROC11 hole from run 544512 instead of 544511
+  - - async-v1-01-18
+  - - async-2023-pbpb-apass4
+  - - Chiara Zampolli
+  - - '1725625044'
   fd832bd3c2073561b2e2f6865aac0a0defcef03f:
   - '1724921825'
   - fd832bd3c2073561b2e2f6865aac0a0defcef03f
