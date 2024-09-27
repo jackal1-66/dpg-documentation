@@ -152,9 +152,17 @@ AliceO2:
   - 2d5edce21b506551053d2590fb5f02d14f680b37
   - Fix in TOF-TPC matching for tracks seeing multiple sectors.
   - - async-v1-01-19
+    - async-v1-01-12b
+    - async-v1-01-12b
   - - async-2023-pbpb-apass4
+    - async-2024-pp-apass1
+    - async-2024-pp-cpass0
   - - Alberto Caliva
+    - Alberto Caliva
+    - Alberto Caliva
   - - '1727428241'
+    - '1727430067'
+    - '1727430067'
   2f8759bd14b8374d20fd33509e46f641324a55ee:
   - '1717667967'
   - 2f8759bd14b8374d20fd33509e46f641324a55ee

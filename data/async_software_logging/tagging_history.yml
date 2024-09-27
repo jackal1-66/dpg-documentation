@@ -796,6 +796,13 @@ AliceO2:
   - - async-2024-pp-apass1
     - async-2024-pp-cpass0
   - Chiara Zampolli
+  async-v1-01-12b:
+  - '1727430067'
+  - async-v1-01-12a
+  - async-v1-01-12b
+  - - async-2024-pp-apass1
+    - async-2024-pp-cpass0
+  - Alberto Caliva
   async-v1-01-13:
   - '1722152007'
   - UNKNOWN REVISION
