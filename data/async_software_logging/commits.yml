@@ -2286,6 +2286,14 @@ O2DPG:
     - '1719323950'
     - '1721469083'
     - '1721469083'
+  9337da9b67910061f3139cf0659ae5b50c695f5b:
+  - '1727428245'
+  - 9337da9b67910061f3139cf0659ae5b50c695f5b
+  - 'PWGHF: remove obsolete generator to avoid confusion (#1742)'
+  - - async-v1-01-19
+  - - async-2023-pbpb-apass4
+  - - Alberto Caliva
+  - - '1727428245'
   945d7f24b50ffef39771704ce3cd2c920504ec6a:
   - '1723040300'
   - 945d7f24b50ffef39771704ce3cd2c920504ec6a
@@ -2623,6 +2631,14 @@ O2DPG:
     - Alberto Caliva
   - - '1719589186'
     - '1724399435'
+  c0c21b285bc7f25879b82339e2bca8552de61943:
+  - '1727428245'
+  - c0c21b285bc7f25879b82339e2bca8552de61943
+  - 'PWGHF: add config for Pb-Pb MCs without pt hard bins for signal (#1743)'
+  - - async-v1-01-19
+  - - async-2023-pbpb-apass4
+  - - Alberto Caliva
+  - - '1727428245'
   c2b733fb8771acbf2867cb39259e851422fea6f6:
   - '1723040300'
   - c2b733fb8771acbf2867cb39259e851422fea6f6

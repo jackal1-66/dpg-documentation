@@ -2,6 +2,8 @@
 
 | Commit subject | Tags first seen / associated labels |
 | --- | --- |
+| [PWGHF: add config for Pb-Pb MCs without pt hard bins for signal (#1743)](https://github.com/AliceO2Group/O2DPG/commit/c0c21b285bc7f25879b82339e2bca8552de61943) | [async-v1-01-19](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-19) (async-2023-pbpb-apass4, 2024-09-27 11:10, Alberto Caliva) |
+| [PWGHF: remove obsolete generator to avoid confusion (#1742)](https://github.com/AliceO2Group/O2DPG/commit/9337da9b67910061f3139cf0659ae5b50c695f5b) | [async-v1-01-19](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-19) (async-2023-pbpb-apass4, 2024-09-27 11:10, Alberto Caliva) |
 | [Start special treatment of IROC11 hole from run 544512 instead of 544511](https://github.com/AliceO2Group/O2DPG/commit/fd76e5f542105e4a961999711d0ce884432aade7) | [async-v1-01-18](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-18) (async-2023-pbpb-apass4, 2024-09-06 14:17, Chiara Zampolli) |
 | [PWGUD Starlight interface (#1663)](https://github.com/AliceO2Group/O2DPG/commit/f79426f195d72ee2f3fe45227fb7150758f5dbcf) | [async-v1-01-18](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-18) (async-2023-pbpb-apass4, 2024-09-06 14:17, Chiara Zampolli) |
 | [Fix TPC timeseries for MC (#1740)](https://github.com/AliceO2Group/O2DPG/commit/f2566668d7d5b965fdc89850718959bff2208a3c) | [async-v1-01-18](https://github.com/AliceO2Group/O2DPG/tree/async-v1-01-18) (async-2023-pbpb-apass4, 2024-09-06 14:17, Chiara Zampolli) |
