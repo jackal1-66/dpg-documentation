@@ -834,6 +834,12 @@ AliceO2:
   - async-v1-01-18
   - - async-2023-pbpb-apass4
   - Chiara Zampolli
+  async-v1-01-19:
+  - '1727428241'
+  - async-v1-01-branch
+  - async-v1-01-19
+  - - async-2023-pbpb-apass4
+  - Alberto Caliva
 O2DPG:
   async-2022-apass4-pp-mc.1:
   - '1702312795'
