@@ -2116,3 +2116,9 @@ QualityControl:
   - async-v1-01-18
   - - async-2023-pbpb-apass4
   - Chiara Zampolli
+  async-v1-01-19:
+  - '1727428250'
+  - async-v1-01-branch
+  - async-v1-01-19
+  - - async-2023-pbpb-apass4
+  - Alberto Caliva
