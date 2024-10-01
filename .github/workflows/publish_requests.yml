@@ -7,7 +7,7 @@ on:
 jobs:
   pr-requests:
     runs-on: ubuntu-latest
-    if: github.repository == 'AliceO2Group/dpg-documentation'
+    #if: github.repository == 'AliceO2Group/dpg-documentation'
     steps:
 
       - name: Set CERN timezone
@@ -343,53 +343,3 @@ jobs:
                   make_report(flag, prs_per_label, f'dpg_pr_report_{flag}.md')
 
           make_markdowns('prs.json')
-
-
-      - name: Add and push changes, get repo ID
-        id: add_push_repo_id
-        env:
-          GITHUB_TOKEN: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
-        working-directory: dpg-documentation/
-        run: |
-          cp ../*.md docs/software/requests_automatic
-          echo "NEED_PR=true" >> $GITHUB_OUTPUT
-          if git diff --quiet; then
-            echo "No changes, nothing to push."
-            echo "NEED_PR=false" >> $GITHUB_OUTPUT
-            exit 0 # Nothing has changed, so no need to send a PR.
-          fi
-          # Add the markdown files here
-          git add *.md
-          git commit -m 'Automatic update of PR requests'
-          git remote set-url origin "https://alibuild:$GITHUB_TOKEN@github.com/AliceO2Group/dpg-documentation"
-          git push -f origin auto-update-requests
-          repo_id=$(jq -r '.doc.id' ../prs.json)
-          echo "REPO_ID=${repo_id}" >> $GITHUB_OUTPUT
-
-      - name: Open PR
-        id: open_pr
-        if: ${{ steps.add_push_repo_id.outputs.NEED_PR == 'true' }}
-        uses: octokit/graphql-action@v2.x
-        env:
-          GITHUB_TOKEN: ${{ secrets.ALIBUILD_GITHUB_TOKEN }}
-          repo_id: ${{ github.repository_id }}
-        with:
-          query: |
-            mutation CreatePullRequest($repoId: ID!) {
-              createPullRequest(input: {
-                repositoryId: $repoId,
-                baseRefName: "main",
-                headRefName: "auto-update-requests",
-                title: "Update requests",
-                body: ""
-              }) {
-                pullRequest {
-                  number
-                  url
-                }
-              }
-            }
-          variables: |
-            {
-              "repoId": "${{ steps.add_push_repo_id.outputs.REPO_ID }}"
-            }
